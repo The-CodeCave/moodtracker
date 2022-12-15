@@ -6,16 +6,13 @@
 name: Dart
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
     types: [closed]
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
