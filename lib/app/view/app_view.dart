@@ -13,7 +13,7 @@ class AppView extends StatelessWidget {
       create: (context) => AppBloc(),
       child: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
-          if (state is AppErrorView) {
+          if (state is AppErrorState) {
             return const AppErrorView();
           }
 
