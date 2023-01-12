@@ -22,6 +22,33 @@ class AppView extends StatelessWidget {
               routerConfig: AppRouter(),
               debugShowCheckedModeBanner: false,
               title: 'Moodtracker',
+              theme: ThemeData(
+                  elevatedButtonTheme: ElevatedButtonThemeData(
+                      style: ButtonStyle(
+                    elevation: MaterialStateProperty.all<double>(0.0),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Color(0xFF006590)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                    ),
+                  )),
+                  textSelectionTheme: TextSelectionThemeData(
+                    cursorColor: Color(0xFF006590),
+                  ),
+                  inputDecorationTheme: InputDecorationTheme(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.cyan),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.cyan),
+                    ),
+                    fillColor: Color(0xFFDEE3E9),
+                    filled: true,
+                    labelStyle: TextStyle(color: Color(0xFF006590)),
+                    focusColor: Color(0xFF006590),
+                  )),
             );
           } else {
             return const Center(
