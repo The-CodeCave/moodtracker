@@ -5,32 +5,79 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double spacerHeight = 10;
     return Scaffold(
       body: Container(
-        color: const Color(0xFFE6E5DE),
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFe9ddff),
+              Color(0xFF4f606e),
+            ],
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
-              flex: 1,
-              child: Image.asset(
-                'login_logo_complete.png',
-              ),
-            ),
-            const SizedBox.square(dimension: 24),
+                child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Image.asset("../assets/login_logo_complete_alpha.png"),
+            )),
             Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  Container(
-                    width: 200,
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'E-Mail',
-                      ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(48),
+                  topRight: Radius.circular(48),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF635A78),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 40, right: 40, top: 50),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          decoration: InputDecoration(labelText: "E-Mail"),
+                        ),
+                        SizedBox(height: spacerHeight),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: "Passwort"),
+                        ),
+                        SizedBox(height: spacerHeight),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 40,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+
+                                  ),
+                                  onPressed: () {},
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.login),
+                                      SizedBox(width: 10),
+                                      Text("Login"),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ],
