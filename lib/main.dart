@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moodtracker/app/simple_bloc_observer.dart';
 import 'package:moodtracker/app/view/app_view.dart';
+import 'package:moodtracker/setup_services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  setupServices();
   Bloc.observer = SimpleBlocObserver();
   runApp(const AppView());
 }

@@ -20,3 +20,8 @@ class AppErrorState extends AppState {
   final String? message;
   const AppErrorState(this.message) : super(isInitialized: false);
 }
+
+class AppAuthenticatedState extends AppInitializedState {
+  final User user;
+  const AppAuthenticatedState({required this.user}) : super();
+}
