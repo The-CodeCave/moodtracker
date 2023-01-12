@@ -12,13 +12,18 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AppBloc(),
-      child: BlocBuilder<AppBloc, AppState>(
+      child: BlocConsumer<AppBloc, AppState>(
+        listener: (context, state) {
+          if (state is AppInitializedState) {
+            context.read<AppBloc>().add(AppRegisterServicesEvent());
+          }
+        },
         builder: (context, state) {
           if (state is AppErrorState) {
             return const AppErrorView();
           }
 
-          if (state.isInitialized) {
+          if (state.isInitialized && state.isServiceRegistered) {
             return MaterialApp.router(
               routerConfig: getIt.get<AppRouter>(),
               debugShowCheckedModeBanner: false,
@@ -27,8 +32,7 @@ class AppView extends StatelessWidget {
                   elevatedButtonTheme: ElevatedButtonThemeData(
                       style: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(0.0),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Color(0xFF006590)),
+                    backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF006590)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
