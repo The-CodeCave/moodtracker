@@ -12,12 +12,3 @@ class AppInitializeEvent extends AppEvent {}
 class AppInitializedEvent extends AppEvent {}
 
 class AppLogoutEvent extends AppEvent {}
-
-class AppLoginEvent extends AppEvent {
-  final User user;
-
-  const AppLoginEvent({required this.user});
-
-  @override
-  List<Object?> get props => [user];
-}

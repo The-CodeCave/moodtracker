@@ -18,8 +18,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(const AppInitialState()) {
     on<AppInitializeEvent>(_onAppInitializeEvent);
     on<AppInitializedEvent>(_onAppInitializedEvent);
-    on<AppLoginEvent>(_onAppLoginEvent);
-    on<AppLogoutEvent>(_onAppLogoutEvent);
     add(AppInitializeEvent());
   }
 
@@ -30,47 +28,33 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             options: DefaultFirebaseOptions.currentPlatform)
         .then((value) => isInit = true)
         .onError(_handleError);
-
+    setupServices();
+    //_setupAuthStateListener(emit);
+    try {
+      _authStateChangesSubscription =
+          getIt.get<LoginService>().authStateChanges.listen((User? user) {
+        if (state is AppInitializedState) {
+          if (user == null) {
+            //emit(AppUserUnauthenticatedState(state.isInitialized));
+          } else {
+            //emit(AppUserAuthenticatedState(user));
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     if (isInit) {
-      add(AppInitializedEvent());
+      emit(AppInitializedState());
     } else {
       emit(const AppErrorState('Firebase Initialization failed.'));
     }
   }
 
   FutureOr<void> _onAppInitializedEvent(
-      AppInitializedEvent event, Emitter<AppState> emit) async {
-    setupServices();
-    emit(AppInitializedState());
-    _setupAuthStateListener();
-  }
+      AppInitializedEvent event, Emitter<AppState> emit) async {}
 
-  FutureOr<void> _onAppLoginEvent(
-      AppLoginEvent event, Emitter<AppState> emit) async {
-    getIt.get<AppRouter>().pushReplacement('/');
-    emit(AppAuthenticatedState(user: event.user));
-  }
-
-  FutureOr<void> _onAppLogoutEvent(
-      AppLogoutEvent event, Emitter<AppState> emit) async {
-    getIt.get<AppRouter>().pushReplacement('/login');
-    emit(const AppInitializedState());
-  }
-
-  void _setupAuthStateListener() {
-    try {
-      _authStateChangesSubscription =
-          getIt.get<LoginService>().authStateChanges.listen((User? user) {
-        if (user == null) {
-          add(AppLogoutEvent());
-        } else {
-          add(AppLoginEvent(user: user));
-        }
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
+  void _setupAuthStateListener(Emitter<AppState> emit) {}
 
   FutureOr<bool> _handleError(Object error, StackTrace stackTrace) {
     debugPrint(error.toString());
