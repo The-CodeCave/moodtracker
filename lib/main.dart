@@ -6,7 +6,6 @@ import 'package:moodtracker/setup_services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  setupServices();
   Bloc.observer = SimpleBlocObserver();
   runApp(const AppView());
 }

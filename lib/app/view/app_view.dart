@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moodtracker/app/bloc/app_bloc.dart';
 import 'package:moodtracker/app/view/app_error_view.dart';
 import 'package:moodtracker/router/app_router.dart';
+import 'package:moodtracker/setup_services.dart';
 
 class AppView extends StatelessWidget {
   const AppView({super.key});
@@ -19,7 +20,7 @@ class AppView extends StatelessWidget {
 
           if (state.isInitialized) {
             return MaterialApp.router(
-              routerConfig: AppRouter(),
+              routerConfig: getIt.get<AppRouter>(),
               debugShowCheckedModeBanner: false,
               title: 'Moodtracker',
               theme: ThemeData(

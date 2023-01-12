@@ -9,6 +9,8 @@ abstract class AppEvent extends Equatable {
 
 class AppInitializeEvent extends AppEvent {}
 
+class AppInitializedEvent extends AppEvent {}
+
 class AppLogoutEvent extends AppEvent {}
 
 class AppLoginEvent extends AppEvent {
