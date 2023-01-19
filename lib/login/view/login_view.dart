@@ -13,6 +13,9 @@ class LoginView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final password = useState<String?>(null);
+    final username = useState<String?>(null);
+
     final hidePasswort = useState<bool>(true);
     const double spacerHeight = 10;
     return BlocProvider(
@@ -60,23 +63,28 @@ class LoginView extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             TextFormField(
+                              onChanged: (value) => username.value = value,
                               decoration: InputDecoration(labelText: "E-Mail"),
                               keyboardType: TextInputType.emailAddress,
                             ),
                             SizedBox(height: spacerHeight),
                             TextFormField(
+                              onChanged: (value) => password.value = value,
                               obscureText: hidePasswort.value,
                               keyboardType: TextInputType.visiblePassword,
                               decoration: InputDecoration(
-                                  labelText: "Passwort",
-                                  suffixIcon: IconButton(
-                                      onPressed: () {
-                                        hidePasswort.value =
-                                            !hidePasswort.value;
-                                      },
-                                      icon: Icon(hidePasswort.value
-                                          ? FontAwesomeIcons.eye
-                                          : FontAwesomeIcons.eyeSlash))),
+                                labelText: "Passwort",
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    hidePasswort.value = !hidePasswort.value;
+                                  },
+                                  icon: Icon(
+                                    hidePasswort.value
+                                        ? FontAwesomeIcons.eye
+                                        : FontAwesomeIcons.eyeSlash,
+                                  ),
+                                ),
+                              ),
                             ),
                             SizedBox(height: spacerHeight),
                             Row(
@@ -84,23 +92,37 @@ class LoginView extends HookWidget {
                                 Expanded(
                                   child: SizedBox(
                                     height: 40,
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(),
-                                      onPressed: () {},
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.login),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            "Login",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline3,
+                                    child: BlocBuilder<LoginBloc, LoginState>(
+                                      builder: (context, state) {
+                                        return ElevatedButton(
+                                          style: ButtonStyle(),
+                                          onPressed: (username.value == null ||
+                                                      password.value == null) ||
+                                                  state is LoginLoading
+                                              ? null
+                                              : () {
+                                                  context.read<LoginBloc>().add(
+                                                        LoginButtonPressed(
+                                                          username:
+                                                              username.value!,
+                                                          password:
+                                                              password.value!,
+                                                        ),
+                                                      );
+                                                },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              state is LoginLoading
+                                                  ? CircularProgressIndicator()
+                                                  : Icon(Icons.login),
+                                              SizedBox(width: 10),
+                                              Text("Login"),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
