@@ -8,3 +8,14 @@ abstract class AppEvent extends Equatable {
 }
 
 class AppInitializeEvent extends AppEvent {}
+
+class AppInitializedEvent extends AppEvent {}
+
+class AppRegisterServicesEvent extends AppEvent {}
+
+class AppAuthUserChangedEvent extends AppEvent {
+  final User? user;
+  const AppAuthUserChangedEvent(this.user);
+}
+
+class AppLogoutEvent extends AppEvent {}
