@@ -210,8 +210,8 @@ class LoginView extends HookWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
