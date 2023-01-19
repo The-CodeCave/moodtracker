@@ -41,6 +41,8 @@ dependencies:
   equatable: ^2.0.5
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.4
+  get_it: ^7.2.0
+  flutter_hooks: ^0.18.5+1
 
 dev_dependencies:
   flutter_test:
