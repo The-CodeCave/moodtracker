@@ -29,6 +29,11 @@ class AppView extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Moodtracker',
               theme: ThemeData(
+                  textTheme: TextTheme(
+                      headline3: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500)),
                   elevatedButtonTheme: ElevatedButtonThemeData(
                       style: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(0.0),
@@ -43,11 +48,11 @@ class AppView extends StatelessWidget {
                     cursorColor: Color(0xFF006590),
                   ),
                   inputDecorationTheme: InputDecorationTheme(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.cyan),
-                    ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.cyan),
+                      borderSide: BorderSide(color: Color(0xFF006590)),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF42474C)),
                     ),
                     fillColor: Color(0xFFDEE3E9),
                     filled: true,
