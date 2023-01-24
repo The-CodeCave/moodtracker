@@ -13,6 +13,14 @@ class LoginView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Do not declare variables in the build method
+    // The build method is called quite often in flutter (could happen with every frame)
+    // Thus the following variables will be created with each call
+    // That leads to loads of work for garbage collection and memory management
+    // It is not recommended by flutter
+    // Dart clean code suggests to put final and const variables before constructors
+    // I fear, especially with hooks, that at some point you are going to run into performance issues.
+    // The published code at github of the hooks library indicates major flaws in clean coding and flutter.
     final password = useState<String?>(null);
     final username = useState<String?>(null);
 
@@ -42,8 +50,7 @@ class LoginView extends HookWidget {
                     flex: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child:
-                          Image.asset("assets/login_logo_complete_alpha.png"),
+                      child: Image.asset("assets/login_logo_complete_alpha.png"),
                     )),
                 Expanded(
                   flex: 6,
@@ -57,8 +64,7 @@ class LoginView extends HookWidget {
                         color: Color(0xFF635A78),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 30, bottom: 30),
+                        padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -79,9 +85,7 @@ class LoginView extends HookWidget {
                                     hidePasswort.value = !hidePasswort.value;
                                   },
                                   icon: Icon(
-                                    hidePasswort.value
-                                        ? FontAwesomeIcons.eye
-                                        : FontAwesomeIcons.eyeSlash,
+                                    hidePasswort.value ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
                                   ),
                                 ),
                               ),
@@ -96,27 +100,20 @@ class LoginView extends HookWidget {
                                       builder: (context, state) {
                                         return ElevatedButton(
                                           style: ButtonStyle(),
-                                          onPressed: (username.value == null ||
-                                                      password.value == null) ||
-                                                  state is LoginLoading
+                                          onPressed: (username.value == null || password.value == null) || state is LoginLoading
                                               ? null
                                               : () {
                                                   context.read<LoginBloc>().add(
                                                         LoginButtonPressed(
-                                                          username:
-                                                              username.value!,
-                                                          password:
-                                                              password.value!,
+                                                          username: username.value!,
+                                                          password: password.value!,
                                                         ),
                                                       );
                                                 },
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              state is LoginLoading
-                                                  ? CircularProgressIndicator()
-                                                  : Icon(Icons.login),
+                                              state is LoginLoading ? CircularProgressIndicator() : Icon(Icons.login),
                                               SizedBox(width: 10),
                                               Text("Login"),
                                             ],
@@ -134,8 +131,7 @@ class LoginView extends HookWidget {
                                 Expanded(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
-                                  child:
-                                      Container(color: Colors.white, height: 1),
+                                  child: Container(color: Colors.white, height: 1),
                                 )),
                                 Text(
                                   "oder",
@@ -144,8 +140,7 @@ class LoginView extends HookWidget {
                                 Expanded(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
-                                  child:
-                                      Container(color: Colors.white, height: 1),
+                                  child: Container(color: Colors.white, height: 1),
                                 )),
                               ],
                             ),
@@ -169,10 +164,7 @@ class LoginView extends HookWidget {
                                     SizedBox(width: 15),
                                     Text(
                                       "Sign in with Google",
-                                      style: TextStyle(
-                                          color: Color(0xFF757575),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
+                                      style: TextStyle(color: Color(0xFF757575), fontSize: 14, fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -199,10 +191,7 @@ class LoginView extends HookWidget {
                                     SizedBox(width: 15),
                                     Text(
                                       "Sign in with Apple",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -211,8 +200,7 @@ class LoginView extends HookWidget {
                             Expanded(
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -220,8 +208,7 @@ class LoginView extends HookWidget {
                                     },
                                     child: Text(
                                       "Registrieren",
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
+                                      style: Theme.of(context).textTheme.headline3,
                                     ),
                                   ),
                                   GestureDetector(
@@ -230,8 +217,7 @@ class LoginView extends HookWidget {
                                     },
                                     child: Text(
                                       "Passwort vergessen?",
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
+                                      style: Theme.of(context).textTheme.headline3,
                                     ),
                                   ),
                                 ],
