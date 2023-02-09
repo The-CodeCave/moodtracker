@@ -13,6 +13,7 @@ class AppRouter extends GoRouter {
             if (getIt.get<LoginService>().getUser() == null) {
               return AppRoutes.login;
             }
+            return Future.value();
           },
           routes: <GoRoute>[
             GoRoute(

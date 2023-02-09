@@ -9,23 +9,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/login_bloc.dart';
 
 class LoginView extends HookWidget {
+  final double spacerHeight = 10;
+
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Do not declare variables in the build method
-    // The build method is called quite often in flutter (could happen with every frame)
-    // Thus the following variables will be created with each call
-    // That leads to loads of work for garbage collection and memory management
-    // It is not recommended by flutter
-    // Dart clean code suggests to put final and const variables before constructors
-    // I fear, especially with hooks, that at some point you are going to run into performance issues.
-    // The published code at github of the hooks library indicates major flaws in clean coding and flutter.
-    final password = useState<String?>(null);
     final username = useState<String?>(null);
-
+    final password = useState<String?>(null);
     final hidePasswort = useState<bool>(true);
-    const double spacerHeight = 10;
     return BlocProvider(
         create: (context) => LoginBloc(),
         child: Scaffold(

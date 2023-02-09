@@ -17,7 +17,6 @@ class LoginSuccess extends LoginState {
   const LoginSuccess({required this.user});
 
   @override
-  //TODO: What to do in this case?
   List<Object> get props => [user ?? ""];
 }
 
