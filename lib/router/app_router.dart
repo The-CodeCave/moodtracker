@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moodtracker/activitiy/view/activity_list_view.dart';
 import 'package:moodtracker/app/view/app_error_view.dart';
 import 'package:moodtracker/login/bloc/login_service.dart';
 import 'package:moodtracker/login/view/auth_view.dart';
@@ -25,7 +26,7 @@ class AppRouter extends GoRouter {
             GoRoute(
                 path: AppRoutes.home,
                 builder: (context, state) {
-                  return const AuthView(child: Text("Home: Not implemented yet."));
+                  return const AuthView(child: ActivityListView());
                 }),
             GoRoute(
               path: AppRoutes.error,
@@ -38,7 +39,7 @@ class AppRouter extends GoRouter {
 }
 
 class AppRoutes {
-  static String login = '/login';
   static String home = '/';
+  static String login = '/login';
   static String error = '/error';
 }
