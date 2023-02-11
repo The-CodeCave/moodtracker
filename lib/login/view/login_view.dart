@@ -52,10 +52,10 @@ class LoginView extends HookWidget {
                       topRight: Radius.circular(48),
                     ),
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        //color: Color(0xFF635A78),
-                      ),
+                      color: Theme.of(context).colorScheme.tertiary,
+                      // decoration: BoxDecoration(
+                      //   color: Color(0xFF635A78),
+                      // ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
                         child: Column(
@@ -63,7 +63,17 @@ class LoginView extends HookWidget {
                           children: [
                             TextFormField(
                               onChanged: (value) => username.value = value,
-                              decoration: InputDecoration(labelText: "E-Mail"),
+                              decoration: InputDecoration(
+                                labelText: "E-Mail",
+                                // You can use filled: true with material color scheme
+                                filled: true,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    // TODO: clear username here
+                                  },
+                                  icon: Icon(Icons.close),
+                                ),
+                              ),
                               keyboardType: TextInputType.emailAddress,
                             ),
                             SizedBox(height: spacerHeight),
@@ -73,6 +83,7 @@ class LoginView extends HookWidget {
                               keyboardType: TextInputType.visiblePassword,
                               decoration: InputDecoration(
                                 labelText: "Passwort",
+                                filled: true,
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     hidePasswort.value = !hidePasswort.value;
@@ -91,8 +102,8 @@ class LoginView extends HookWidget {
                                     height: 40,
                                     child: BlocBuilder<LoginBloc, LoginState>(
                                       builder: (context, state) {
-                                        return ElevatedButton(
-                                          style: ButtonStyle(),
+                                        // TODO: m3 use filled button instead of elevated button
+                                        return FilledButton.icon(
                                           onPressed: (username.value == null || password.value == null) || state is LoginLoading
                                               ? null
                                               : () {
@@ -103,14 +114,14 @@ class LoginView extends HookWidget {
                                                         ),
                                                       );
                                                 },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              state is LoginLoading ? CircularProgressIndicator() : Icon(Icons.login),
-                                              SizedBox(width: 10),
-                                              Text("Login"),
-                                            ],
-                                          ),
+                                          icon: state is LoginLoading
+                                              ? SizedBox(
+                                                  height: Theme.of(context).textTheme.labelLarge?.fontSize,
+                                                  width: Theme.of(context).textTheme.labelLarge?.fontSize,
+                                                  child: CircularProgressIndicator(strokeWidth: 2.0),
+                                                )
+                                              : Icon(Icons.login),
+                                          label: Text("Login"),
                                         );
                                       },
                                     ),
@@ -127,7 +138,7 @@ class LoginView extends HookWidget {
                                   child: Container(color: Colors.white, height: 1),
                                 )),
                                 Text(
-                                  // TODO: check this example so the labels are kept consistent through the app
+                                  // TODO: check this example, this way the labels are kept consistent through the app
                                   "oder",
                                   style: TextStyle(
                                     inherit: true,
@@ -200,24 +211,39 @@ class LoginView extends HookWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
+                                  // Use TextButton instead of gesture detector, improves mouse hover for web?
+                                  TextButton(
+                                    style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onTertiary),
+                                    onPressed: () {
                                       //TODO: Implement Register
                                     },
-                                    child: Text(
-                                      "Registrieren",
-                                      style: Theme.of(context).textTheme.headline3,
-                                    ),
+                                    child: Text('Registrieren'),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
+                                  TextButton(
+                                    style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onTertiary),
+                                    onPressed: () {
                                       //TODO: Implement Forgot Password
                                     },
-                                    child: Text(
-                                      "Passwort vergessen?",
-                                      style: Theme.of(context).textTheme.headline3,
-                                    ),
+                                    child: Text('Passwort vergessen?'),
                                   ),
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     //TODO: Implement Register
+                                  //   },
+                                  //   child: Text(
+                                  //     "Registrieren",
+                                  //     style: Theme.of(context).textTheme.headline3,
+                                  //   ),
+                                  // ),
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     //TODO: Implement Forgot Password
+                                  //   },
+                                  //   child: Text(
+                                  //     "Passwort vergessen?",
+                                  //     style: Theme.of(context).textTheme.headline3,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             )
