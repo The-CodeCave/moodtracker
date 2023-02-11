@@ -28,37 +28,7 @@ class AppView extends StatelessWidget {
               routerConfig: getIt.get<AppRouter>(),
               debugShowCheckedModeBanner: false,
               title: 'Moodtracker',
-              theme: ThemeData(
-                  textTheme: TextTheme(
-                      headline3: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500)),
-                  elevatedButtonTheme: ElevatedButtonThemeData(
-                      style: ButtonStyle(
-                    elevation: MaterialStateProperty.all<double>(0.0),
-                    backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF006590)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100.0),
-                      ),
-                    ),
-                  )),
-                  textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: Color(0xFF006590),
-                  ),
-                  inputDecorationTheme: InputDecorationTheme(
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF006590)),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF42474C)),
-                    ),
-                    fillColor: Color(0xFFDEE3E9),
-                    filled: true,
-                    labelStyle: TextStyle(color: Color(0xFF006590)),
-                    focusColor: Color(0xFF006590),
-                  )),
+              theme: _buildTheme(context),
             );
           } else {
             return const Center(
@@ -67,6 +37,31 @@ class AppView extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  // TODO: incroproate the official material theme?
+  // This way all colors will be set for dialogs, appbars, cards, containers and so on
+  // There will be only a few things left to fix manually
+  ThemeData _buildTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: Color(0xFF006590),
+        onPrimary: Color(0xFFFFFFFF),
+        primaryContainer: Color(0xFFC8E6FF),
+        secondary: Color(0xFF52606C),
+        onSecondary: Color(0xFFFFFFFF),
+        tertiary: Color(0xFF635A78),
+        onTertiary: Color(0xFFFFFFFF),
+        error: Color(0xFFBA1A1A),
+        onError: Color(0xFFFFFFFF),
+        background: Color(0xFFFCFCFE),
+        onBackground: Color(0xFF1A1C1E),
+        surface: Color(0xFFFCFCFE),
+        onSurface: Color(0xFF1A1C1E),
+      ),
+      useMaterial3: true,
     );
   }
 }

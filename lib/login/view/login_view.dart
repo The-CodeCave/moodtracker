@@ -53,7 +53,8 @@ class LoginView extends HookWidget {
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF635A78),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        //color: Color(0xFF635A78),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
@@ -126,8 +127,13 @@ class LoginView extends HookWidget {
                                   child: Container(color: Colors.white, height: 1),
                                 )),
                                 Text(
+                                  // TODO: check this example so the labels are kept consistent through the app
                                   "oder",
-                                  style: Theme.of(context).textTheme.headline3,
+                                  style: TextStyle(
+                                    inherit: true,
+                                    color: Theme.of(context).colorScheme.onTertiary,
+                                  ),
+                                  //style: Theme.of(context).textTheme.headline3,
                                 ),
                                 Expanded(
                                     child: Padding(
