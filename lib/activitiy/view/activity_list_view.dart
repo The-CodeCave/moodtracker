@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/activity_bloc.dart';
+import '../model/activity.dart';
 
 class ActivityListView extends StatelessWidget {
   final String title = 'Aktivitäten';
@@ -11,7 +15,10 @@ class ActivityListView extends StatelessWidget {
         title: Text(title),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Activity a = Activity(id: '', name: 'Test');
+              context.read<ActivityBloc>().add(ActivityAddEvent(a));
+            },
             icon: Icon(Icons.add),
           ),
           IconButton(

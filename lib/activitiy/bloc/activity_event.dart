@@ -6,3 +6,8 @@ abstract class ActivityEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class ActivityAddEvent extends ActivityEvent {
+  final Activity activity;
+  const ActivityAddEvent(this.activity);
+}
