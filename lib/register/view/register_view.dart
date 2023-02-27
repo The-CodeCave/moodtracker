@@ -1,18 +1,13 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moodtracker/app/bloc/app_bloc.dart';
+import 'package:moodtracker/register/bloc/register_bloc.dart';
 
-import '../bloc/login_bloc.dart';
-
-class LoginView extends HookWidget {
+class RegisterView extends HookWidget {
   final double spacerHeight = 10;
-
-  const LoginView({super.key});
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +15,7 @@ class LoginView extends HookWidget {
     final password = useState<String?>(null);
     final hidePasswort = useState<bool>(true);
     return BlocProvider(
-        create: (context) => LoginBloc(),
+        create: (context) => RegisterBloc(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Container(
@@ -68,7 +63,11 @@ class LoginView extends HookWidget {
                               decoration: InputDecoration(labelText: "E-Mail"),
                               keyboardType: TextInputType.emailAddress,
                             ),
-                            SizedBox(height: spacerHeight),
+                            Divider(
+                              height: 60,
+                              color: Colors.white,
+                              thickness: 1,
+                            ),
                             TextFormField(
                               onChanged: (value) => password.value = value,
                               obscureText: hidePasswort.value,
@@ -93,17 +92,20 @@ class LoginView extends HookWidget {
                                 Expanded(
                                   child: SizedBox(
                                     height: 40,
-                                    child: BlocBuilder<LoginBloc, LoginState>(
+                                    child: BlocBuilder<RegisterBloc,
+                                        RegisterState>(
                                       builder: (context, state) {
                                         return ElevatedButton(
                                           style: ButtonStyle(),
                                           onPressed: (username.value == null ||
                                                       password.value == null) ||
-                                                  state is LoginLoading
+                                                  state is RegisterLoading
                                               ? null
                                               : () {
-                                                  context.read<LoginBloc>().add(
-                                                        LoginButtonPressed(
+                                                  context
+                                                      .read<RegisterBloc>()
+                                                      .add(
+                                                        RegisterButtonPressed(
                                                           username:
                                                               username.value!,
                                                           password:
@@ -115,11 +117,11 @@ class LoginView extends HookWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              state is LoginLoading
+                                              state is RegisterLoading
                                                   ? CircularProgressIndicator()
                                                   : Icon(Icons.login),
                                               SizedBox(width: 10),
-                                              Text("Login"),
+                                              Text("Registrieren"),
                                             ],
                                           ),
                                         );
@@ -151,16 +153,21 @@ class LoginView extends HookWidget {
                               ],
                             ),
                             SizedBox(height: spacerHeight),
-                            BlocBuilder<LoginBloc, LoginState>(
+                            BlocBuilder<RegisterBloc, RegisterState>(
                               builder: (context, state) {
                                 return MaterialButton(
                                   elevation: 0.0,
-                                  onPressed: state is LoginLoading
+                                  onPressed: state is RegisterLoading
                                       ? null
                                       : () async {
-                                          context
-                                              .read<LoginBloc>()
-                                              .add(LoginWithPasskey());
+                                          if (username.value != null &&
+                                              username.value!.isNotEmpty) {
+                                            context.read<RegisterBloc>().add(
+                                                  RegisterWithPasskey(
+                                                    username: username.value!,
+                                                  ),
+                                                );
+                                          }
                                         },
                                   height: 40,
                                   color: Colors.black,
@@ -177,7 +184,7 @@ class LoginView extends HookWidget {
                                         ),
                                         SizedBox(width: 15),
                                         Text(
-                                          "Sign in with Passkey",
+                                          "Mit Passkey registrieren",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 16,
@@ -189,65 +196,6 @@ class LoginView extends HookWidget {
                                 );
                               },
                             ),
-                            SizedBox(height: !kIsWeb ? 2 : spacerHeight),
-                            MaterialButton(
-                              elevation: 0.0,
-                              onPressed: () async {
-                                //TODO: Implement Google Login
-                              },
-                              height: 40,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/googlelogo.png',
-                                      height: 22,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Text(
-                                      "Sign in with Google",
-                                      style: TextStyle(
-                                          color: Color(0xFF757575),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: !kIsWeb ? 2 : spacerHeight),
-                            MaterialButton(
-                              elevation: 0.0,
-                              onPressed: () async {
-                                //TODO: Implement Apple Login
-                              },
-                              height: 40,
-                              color: Colors.black,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.apple,
-                                      color: Colors.white,
-                                      size: 22,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Text(
-                                      "Sign in with Apple",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                             Expanded(
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -256,12 +204,12 @@ class LoginView extends HookWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      context.read<AppBloc>().add(
-                                            AppRegisterButtonPressed(),
-                                          );
+                                      context
+                                          .read<AppBloc>()
+                                          .add(AppLoginButtonPressed());
                                     },
                                     child: Text(
-                                      "Registrieren",
+                                      "Einloggen",
                                       style:
                                           Theme.of(context).textTheme.headline3,
                                     ),

@@ -4,13 +4,15 @@ import 'package:moodtracker/app/view/app_error_view.dart';
 import 'package:moodtracker/login/bloc/login_service.dart';
 import 'package:moodtracker/login/view/auth_view.dart';
 import 'package:moodtracker/login/view/login_view.dart';
+import 'package:moodtracker/register/view/register_view.dart';
 import 'package:moodtracker/setup_services.dart';
 
 class AppRouter extends GoRouter {
   AppRouter()
       : super(
           redirect: (context, state) {
-            if (getIt.get<LoginService>().getUser() == null) {
+            if (getIt.get<LoginService>().getUser() == null &&
+                state.location != AppRoutes.register) {
               return AppRoutes.login;
             }
             return Future.value();
@@ -23,9 +25,16 @@ class AppRouter extends GoRouter {
               },
             ),
             GoRoute(
+              path: AppRoutes.register,
+              builder: (context, state) {
+                return RegisterView();
+              },
+            ),
+            GoRoute(
                 path: AppRoutes.home,
                 builder: (context, state) {
-                  return const AuthView(child: Text("Home: Not implemented yet."));
+                  return const AuthView(
+                      child: Text("Home: Not implemented yet."));
                 }),
             GoRoute(
               path: AppRoutes.error,
@@ -39,6 +48,7 @@ class AppRouter extends GoRouter {
 
 class AppRoutes {
   static String login = '/login';
+  static String register = '/register';
   static String home = '/';
   static String error = '/error';
 }
