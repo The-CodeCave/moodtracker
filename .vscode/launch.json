@@ -7,19 +7,37 @@
         {
             "name": "moodtracker",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "5000"
+            ],
         },
         {
             "name": "moodtracker (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "5000"
+            ],
         },
         {
             "name": "moodtracker (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "5000"
+            ],
         }
     ]
 }

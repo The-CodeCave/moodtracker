@@ -24,6 +24,10 @@ class LoginButtonPressed extends LoginEvent {
       'LoginButtonPressed { username: $username, password: $password }';
 }
 
+class GoogleLoginButtonPressed extends LoginEvent {}
+
+class AppleLoginButtonPressed extends LoginEvent {}
+
 class RegisterButtonPressed extends LoginEvent {
   final String username;
   final String password;

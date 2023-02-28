@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:172807214156:android:743abdbee009720c7b50e9",
         "android_client_info": {
-          "package_name": "com.example.moodtracker"
+          "package_name": "de.thecodecave.moodtracker"
         }
       },
       "oauth_client": [

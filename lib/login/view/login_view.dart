@@ -5,6 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:moodtracker/login/bloc/login_service.dart';
 
 import '../bloc/login_bloc.dart';
 
@@ -150,63 +152,77 @@ class LoginView extends HookWidget {
                               ],
                             ),
                             SizedBox(height: spacerHeight),
-                            MaterialButton(
-                              elevation: 0.0,
-                              onPressed: () async {
-                                //TODO: Implement Google Login
+                            BlocBuilder<LoginBloc, LoginState>(
+                              builder: (context, state) {
+                                return MaterialButton(
+                                  elevation: 0.0,
+                                  onPressed: () async {
+                                    context.read<LoginBloc>().add(
+                                          GoogleLoginButtonPressed(),
+                                        );
+                                  },
+                                  height: 40,
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/googlelogo.png',
+                                          height: 22,
+                                        ),
+                                        SizedBox(width: 15),
+                                        Text(
+                                          "Sign in with Google",
+                                          style: TextStyle(
+                                              color: Color(0xFF757575),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
                               },
-                              height: 40,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/googlelogo.png',
-                                      height: 22,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Text(
-                                      "Sign in with Google",
-                                      style: TextStyle(
-                                          color: Color(0xFF757575),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                             SizedBox(height: !kIsWeb ? 2 : spacerHeight),
-                            MaterialButton(
-                              elevation: 0.0,
-                              onPressed: () async {
-                                //TODO: Implement Apple Login
-                              },
-                              height: 40,
-                              color: Colors.black,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.apple,
-                                      color: Colors.white,
-                                      size: 22,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Text(
-                                      "Sign in with Apple",
-                                      style: TextStyle(
+                            BlocBuilder<LoginBloc, LoginState>(
+                              builder: (context, state) {
+                                return MaterialButton(
+                                  elevation: 0.0,
+                                  onPressed: () async {
+                                    context.read<LoginBloc>().add(
+                                          AppleLoginButtonPressed(),
+                                        );
+                                  },
+                                  height: 40,
+                                  color: Colors.black,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          FontAwesomeIcons.apple,
                                           color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                          size: 22,
+                                        ),
+                                        SizedBox(width: 15),
+                                        Text(
+                                          "Sign in with Apple",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             ),
                             Expanded(
                               child: Row(

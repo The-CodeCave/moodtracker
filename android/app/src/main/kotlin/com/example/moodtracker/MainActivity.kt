@@ -1,4 +1,4 @@
-package com.example.moodtracker
+package de.thecodecave.moodtracker
 
 import io.flutter.embedding.android.FlutterActivity
 
