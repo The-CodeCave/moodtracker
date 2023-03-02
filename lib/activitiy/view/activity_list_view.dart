@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moodtracker/activitiy/view/activity_add_dialog.dart';
 
 import '../bloc/activity_bloc.dart';
 import '../model/activity.dart';
@@ -16,6 +17,11 @@ class ActivityListView extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const ActivityAddDialog();
+                  });
               Activity a = Activity(id: '', name: 'Test');
               context.read<ActivityBloc>().add(ActivityAddEvent(a));
             },
