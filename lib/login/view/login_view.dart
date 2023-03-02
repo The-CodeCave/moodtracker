@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moodtracker/app/bloc/app_bloc.dart';
 
 import '../bloc/login_bloc.dart';
 
@@ -42,7 +43,8 @@ class LoginView extends HookWidget {
                     flex: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: Image.asset("assets/login_logo_complete_alpha.png"),
+                      child:
+                          Image.asset("assets/login_logo_complete_alpha.png"),
                     )),
                 Expanded(
                   flex: 6,
@@ -57,7 +59,8 @@ class LoginView extends HookWidget {
                       //   color: Color(0xFF635A78),
                       // ),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
+                        padding: const EdgeInsets.only(
+                            left: 30, right: 30, top: 30, bottom: 30),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -89,7 +92,9 @@ class LoginView extends HookWidget {
                                     hidePasswort.value = !hidePasswort.value;
                                   },
                                   icon: Icon(
-                                    hidePasswort.value ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
+                                    hidePasswort.value
+                                        ? FontAwesomeIcons.eye
+                                        : FontAwesomeIcons.eyeSlash,
                                   ),
                                 ),
                               ),
@@ -109,8 +114,10 @@ class LoginView extends HookWidget {
                                               : () {
                                                   context.read<LoginBloc>().add(
                                                         LoginButtonPressed(
-                                                          username: username.value!,
-                                                          password: password.value!,
+                                                          username:
+                                                              username.value!,
+                                                          password:
+                                                              password.value!,
                                                         ),
                                                       );
                                                 },
@@ -135,7 +142,8 @@ class LoginView extends HookWidget {
                                 Expanded(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
-                                  child: Container(color: Colors.white, height: 1),
+                                  child:
+                                      Container(color: Colors.white, height: 1),
                                 )),
                                 Text(
                                   // TODO: check this example, this way the labels are kept consistent through the app
@@ -149,11 +157,51 @@ class LoginView extends HookWidget {
                                 Expanded(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
-                                  child: Container(color: Colors.white, height: 1),
+                                  child:
+                                      Container(color: Colors.white, height: 1),
                                 )),
                               ],
                             ),
                             SizedBox(height: spacerHeight),
+                            BlocBuilder<LoginBloc, LoginState>(
+                              builder: (context, state) {
+                                return MaterialButton(
+                                  elevation: 0.0,
+                                  onPressed: state is LoginLoading
+                                      ? null
+                                      : () async {
+                                          context
+                                              .read<LoginBloc>()
+                                              .add(LoginWithPasskey());
+                                        },
+                                  height: 40,
+                                  color: Colors.black,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          FontAwesomeIcons.key,
+                                          color: Colors.white,
+                                          size: 22,
+                                        ),
+                                        SizedBox(width: 15),
+                                        Text(
+                                          "Sign in with Passkey",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: !kIsWeb ? 2 : spacerHeight),
                             MaterialButton(
                               elevation: 0.0,
                               onPressed: () async {
@@ -173,7 +221,10 @@ class LoginView extends HookWidget {
                                     SizedBox(width: 15),
                                     Text(
                                       "Sign in with Google",
-                                      style: TextStyle(color: Color(0xFF757575), fontSize: 14, fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          color: Color(0xFF757575),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -200,7 +251,10 @@ class LoginView extends HookWidget {
                                     SizedBox(width: 15),
                                     Text(
                                       "Sign in with Apple",
-                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -209,7 +263,8 @@ class LoginView extends HookWidget {
                             Expanded(
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   // Use TextButton instead of gesture detector, improves mouse hover for web?
                                   TextButton(

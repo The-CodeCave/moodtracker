@@ -15,9 +15,11 @@ class AuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppBloc, AppState>(
-      listenWhen: (previous, current) => current is AppUserUnauthenticatedState,
       listener: (context, state) {
-        GoRouter.of(context).go(AppRoutes.login);
+        if (state is AppUserUnauthenticatedState) {
+          GoRouter.of(context).go(AppRoutes.login);
+          return;
+        }
       },
       child: child,
     );

@@ -13,6 +13,10 @@ class AppInitializedEvent extends AppEvent {}
 
 class AppRegisterServicesEvent extends AppEvent {}
 
+class AppRegisterButtonPressed extends AppEvent {}
+
+class AppLoginButtonPressed extends AppEvent {}
+
 class AppAuthUserChangedEvent extends AppEvent {
   final User? user;
   const AppAuthUserChangedEvent(this.user);
