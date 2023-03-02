@@ -1,4 +1,4 @@
-import 'package:flutter_passkeys/types/attestation_preference.dart';
+
 import 'package:flutter_passkeys/types/authentication_response.dart';
 import 'package:flutter_passkeys/types/creation_response.dart';
 import 'package:flutter_passkeys/types/user_verification_preference.dart';

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_passkeys/flutter_passkeys.dart';
 import 'package:http/http.dart' as http;
 import 'package:moodtracker/constants.dart';

@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moodtracker/firebase_options.dart';
-import 'package:moodtracker/login/bloc/login_service.dart';
 import 'package:moodtracker/router/app_router.dart';
 import 'package:moodtracker/setup_services.dart';
 
