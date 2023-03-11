@@ -15,7 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     _loginService = getIt.get<LoginService>();
     on<LoginButtonPressed>(_onLoginButtonPressed);
-    on<RegisterButtonPressed>(_onRegisterButtonPressed);
+    on<LoginWithPasskey>(_onLoginWithPasskey);
   }
 
   FutureOr<void> _onLoginButtonPressed(
@@ -24,18 +24,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await _loginService.login(event.username, event.password);
       emit(LoginSuccess(user: user));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(LoginError(message: e.toString()));
     }
   }
 
-  FutureOr<void> _onRegisterButtonPressed(
-      RegisterButtonPressed event, Emitter<LoginState> emit) async {
+  FutureOr<void> _onLoginWithPasskey(
+      LoginWithPasskey event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
     try {
-      final user = await _loginService.register(event.username, event.password);
-      emit(LoginSuccess(user: user));
-    } on Exception catch (e) {
+      final user = await _loginService.loginWithPasskey();
+      if (user != null) {
+        emit(LoginSuccess(user: user));
+      } else {
+        emit(LoginError(message: 'Invalid credentials'));
+      }
+    } catch (e) {
       emit(LoginError(message: e.toString()));
     }
   }
