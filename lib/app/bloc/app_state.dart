@@ -15,27 +15,22 @@ abstract class AppState extends Equatable {
 }
 
 class AppInitialState extends AppState {
-  const AppInitialState()
-      : super(isInitialized: false, isServiceRegistered: false);
+  const AppInitialState() : super(isInitialized: false, isServiceRegistered: false);
 }
 
 class AppInitializedState extends AppState {
-  const AppInitializedState()
-      : super(isInitialized: true, isServiceRegistered: false);
+  const AppInitializedState() : super(isInitialized: true, isServiceRegistered: false);
 }
 
 class AppUserUnauthenticatedState extends AppState {
-  const AppUserUnauthenticatedState(bool isInitialized)
-      : super(isInitialized: isInitialized, isServiceRegistered: true);
+  const AppUserUnauthenticatedState(bool isInitialized) : super(isInitialized: isInitialized, isServiceRegistered: true);
 }
 
 class AppUserAuthenticatedState extends AppState {
-  const AppUserAuthenticatedState(User user)
-      : super(isInitialized: true, isServiceRegistered: false, user: user);
+  const AppUserAuthenticatedState(User user) : super(isInitialized: true, isServiceRegistered: true, user: user);
 }
 
 class AppErrorState extends AppState {
   final String? message;
-  const AppErrorState(this.message)
-      : super(isInitialized: false, isServiceRegistered: false);
+  const AppErrorState(this.message) : super(isInitialized: false, isServiceRegistered: false);
 }
