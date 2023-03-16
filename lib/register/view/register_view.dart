@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moodtracker/app/bloc/app_bloc.dart';
 import 'package:moodtracker/register/bloc/register_bloc.dart';
+
+import '../../router/app_router.dart';
 
 class RegisterView extends HookWidget {
   final double spacerHeight = 10;
@@ -12,6 +15,8 @@ class RegisterView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final username = useState<String?>(null);
+    final username_passkey = useState<String?>(null);
+
     final password = useState<String?>(null);
     final hidePasswort = useState<bool>(true);
     return BlocProvider(
@@ -60,13 +65,21 @@ class RegisterView extends HookWidget {
                           children: [
                             TextFormField(
                               onChanged: (value) => username.value = value,
-                              decoration: InputDecoration(labelText: "E-Mail"),
+                              decoration: InputDecoration(
+                                labelText: "E-Mail",
+                                // You can use filled: true with material color scheme
+                                filled: true,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    // TODO: clear username here
+                                  },
+                                  icon: Icon(Icons.close),
+                                ),
+                              ),
                               keyboardType: TextInputType.emailAddress,
                             ),
-                            Divider(
-                              height: 60,
-                              color: Colors.white,
-                              thickness: 1,
+                            SizedBox(
+                              height: 20,
                             ),
                             TextFormField(
                               onChanged: (value) => password.value = value,
@@ -74,6 +87,7 @@ class RegisterView extends HookWidget {
                               keyboardType: TextInputType.visiblePassword,
                               decoration: InputDecoration(
                                 labelText: "Passwort",
+                                filled: true,
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     hidePasswort.value = !hidePasswort.value;
@@ -142,7 +156,7 @@ class RegisterView extends HookWidget {
                                 )),
                                 Text(
                                   "oder",
-                                  style: Theme.of(context).textTheme.headline3,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 Expanded(
                                     child: Padding(
@@ -153,76 +167,110 @@ class RegisterView extends HookWidget {
                               ],
                             ),
                             SizedBox(height: spacerHeight),
+                            TextFormField(
+                              onChanged: (value) =>
+                                  username_passkey.value = value,
+                              decoration: InputDecoration(
+                                labelText: "E-Mail",
+                                // You can use filled: true with material color scheme
+                                filled: true,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    // TODO: clear username here
+                                  },
+                                  icon: Icon(Icons.close),
+                                ),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             BlocBuilder<RegisterBloc, RegisterState>(
                               builder: (context, state) {
                                 return MaterialButton(
                                   elevation: 0.0,
-                                  onPressed: state is RegisterLoading
-                                      ? null
-                                      : () async {
-                                          if (username.value != null &&
-                                              username.value!.isNotEmpty) {
-                                            context.read<RegisterBloc>().add(
-                                                  RegisterWithPasskey(
-                                                    username: username.value!,
-                                                  ),
-                                                );
-                                          }
-                                        },
+                                  onPressed: () async {
+                                    if (username_passkey.value != null &&
+                                        username_passkey.value!.isNotEmpty &&
+                                        state is! RegisterLoadingPasskey) {
+                                      context.read<RegisterBloc>().add(
+                                            RegisterWithPasskey(
+                                              username: username_passkey.value!,
+                                            ),
+                                          );
+                                    }
+                                  },
                                   height: 40,
                                   color: Colors.black,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          FontAwesomeIcons.key,
-                                          color: Colors.white,
-                                          size: 22,
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Mit Passkey registrieren",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
+                                    child: state is RegisterLoadingPasskey
+                                        ? Center(
+                                            child: SizedBox(
+                                              height: 38,
+                                              width: 38,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                FontAwesomeIcons.key,
+                                                color: Colors.white,
+                                                size: 22,
+                                              ),
+                                              SizedBox(width: 15),
+                                              Text(
+                                                "Mit Passkey registrieren",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
                                   ),
                                 );
                               },
                             ),
                             Expanded(
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      context
-                                          .read<AppBloc>()
-                                          .add(AppLoginButtonPressed());
+                                  // Use TextButton instead of gesture detector, improves mouse hover for web?
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        foregroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary),
+                                    onPressed: () {
+                                      context.go(AppRoutes.login);
                                     },
-                                    child: Text(
-                                      "Einloggen",
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
+                                    child: Text('Einloggen'),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .onTertiary,
+                                    ),
+                                    onPressed: () {
                                       //TODO: Implement Forgot Password
                                     },
-                                    child: Text(
-                                      "Passwort vergessen?",
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
-                                    ),
+                                    child: Text('Passwort vergessen?'),
                                   ),
                                 ],
                               ),

@@ -11,6 +11,8 @@ class RegisterInitial extends RegisterState {}
 
 class RegisterLoading extends RegisterState {}
 
+class RegisterLoadingPasskey extends RegisterState {}
+
 class RegisterError extends RegisterState {
   final String message;
 
