@@ -11,3 +11,10 @@ class ActivityAddEvent extends ActivityEvent {
   final Activity activity;
   const ActivityAddEvent(this.activity);
 }
+
+class ActivityFetchEvent extends ActivityEvent {}
+
+class ActivityApplyFilterEvent extends ActivityFetchEvent {
+  final ActivityFilter filter;
+  ActivityApplyFilterEvent(this.filter) : super();
+}
