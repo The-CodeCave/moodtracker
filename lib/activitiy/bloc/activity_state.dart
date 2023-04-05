@@ -15,4 +15,7 @@ class ActivityLoaded extends ActivityState {
   final ActivityFilter? filter;
   final List<Activity> activities;
   const ActivityLoaded(this.activities, this.filter);
+
+  @override
+  List<Object> get props => [activities, filter ?? ActivityFilter()];
 }

@@ -9,19 +9,18 @@ import 'package:moodtracker/activitiy/model/activity_filter.dart';
 import '../bloc/activity_bloc.dart';
 
 class ActivityFilterDialog extends HookWidget {
-  ActivityBloc bloc;
-  ActivityFilterDialog({super.key, required this.bloc});
+  const ActivityFilterDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     final ActivityFilter? initialState = useMemoized(
       () {
-        if (bloc.state is ActivityLoaded) {
-          return (bloc.state as ActivityLoaded).filter;
+        if (context.read<ActivityBloc>().state is ActivityLoaded) {
+          return (context.read<ActivityBloc>().state as ActivityLoaded).filter;
         }
         return null;
       },
-      [bloc.state],
+      [context.read<ActivityBloc>().state],
     );
 
     final state = useState<ActivityFilter>(initialState ?? ActivityFilter());
@@ -35,7 +34,9 @@ class ActivityFilterDialog extends HookWidget {
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            bloc.add(ActivityApplyFilterEvent(state.value));
+            context.read<ActivityBloc>().add(
+                  ActivityApplyFilterEvent(state.value),
+                );
           },
           child: Text('Anwenden'),
         ),
@@ -57,15 +58,15 @@ class ActivityFilterDialog extends HookWidget {
             showSelectedIcon: false,
             segments: [
               ButtonSegment(
-                label: Text('Arbeit'),
+                label: Icon(Icons.work),
                 value: ActivityCategory.work.name,
               ),
               ButtonSegment(
-                label: Text('Verpflichtung'),
+                label: Icon(Icons.home),
                 value: ActivityCategory.obligation.name,
               ),
               ButtonSegment(
-                label: Text('Freizeit'),
+                label: Icon(Icons.star),
                 value: ActivityCategory.hobby.name,
               ),
             ],
@@ -94,9 +95,6 @@ class ActivityFilterDialog extends HookWidget {
             height: 15,
           ),
           TextFormField(
-            decoration: InputDecoration(
-              suffixIcon: Icon(Icons.clear),
-            ),
             initialValue: state.value.nameFilter,
             onChanged: (value) {
               state.value = state.value.copyWith(nameFilter: value);

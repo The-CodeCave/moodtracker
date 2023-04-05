@@ -36,11 +36,13 @@ class ActivityListView extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
+                final bloc = context.read<ActivityBloc>();
                 showDialog(
                   context: context,
-                  builder: (context) {
-                    return ActivityFilterDialog(
-                      bloc: context.read<ActivityBloc>(),
+                  builder: (_) {
+                    return BlocProvider.value(
+                      value: bloc,
+                      child: ActivityFilterDialog(),
                     );
                   },
                 );

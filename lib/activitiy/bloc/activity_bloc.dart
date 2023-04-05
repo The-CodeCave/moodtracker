@@ -31,9 +31,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       emit(
         ActivityLoaded(
           activities
-              .where((element) =>
-                  element.category == event.filter.selectedCategory ||
-                  element.name.contains(event.filter.nameFilter ?? ""))
+              //TODO: Needs refactoring. Is too complex for "one liner", but works for now
+              .where((element) => event.filter.selectedCategory != null
+                  ? (element.category == event.filter.selectedCategory)
+                  : true &&
+                      element.name.contains(event.filter.nameFilter ?? ""))
               .toList(),
           event.filter,
         ),
