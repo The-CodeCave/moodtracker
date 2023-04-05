@@ -6,6 +6,7 @@ import 'package:moodtracker/login/bloc/login_service.dart';
 import 'package:moodtracker/login/view/auth_view.dart';
 import 'package:moodtracker/login/view/login_view.dart';
 import 'package:moodtracker/register/view/register_view.dart';
+import 'package:moodtracker/resetPassword/view/reset_password_view.dart';
 import 'package:moodtracker/setup_services.dart';
 
 import '../activitiy/bloc/activity_bloc.dart';
@@ -14,7 +15,9 @@ class AppRouter extends GoRouter {
   AppRouter()
       : super(
           redirect: (context, state) {
-            if (getIt.get<LoginService>().getUser() == null && state.location != AppRoutes.register) {
+            if (getIt.get<LoginService>().getUser() == null &&
+                state.location != AppRoutes.register &&
+                state.location != AppRoutes.forgotPassword) {
               return AppRoutes.login;
             }
             return Future.value();
@@ -47,6 +50,12 @@ class AppRouter extends GoRouter {
                 return const AppErrorView();
               },
             ),
+            GoRoute(
+              path: AppRoutes.forgotPassword,
+              builder: (context, state) {
+                return ResetPasswordView();
+              },
+            ),
           ],
         );
 }
@@ -56,4 +65,5 @@ class AppRoutes {
   static String login = '/login';
   static String register = '/register';
   static String error = '/error';
+  static String forgotPassword = '/forgotPassword';
 }

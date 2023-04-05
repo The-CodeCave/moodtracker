@@ -32,7 +32,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   FutureOr<void> _onRegisterWithPasskey(
       RegisterWithPasskey event, Emitter<RegisterState> emit) async {
-    emit(RegisterLoading());
+    emit(RegisterLoadingPasskey());
     //TODO: Figure out why the error isnt thrown if the http request fails
     try {
       final user = await _registerService.registerWithPasskey(event.username);

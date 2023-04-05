@@ -11,6 +11,12 @@ class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
+class LoginLaodingPasskey extends LoginState {}
+
+class LoginLoadingGoogle extends LoginState {}
+
+class LoginLoadingApple extends LoginState {}
+
 class LoginSuccess extends LoginState {
   final User? user;
 
