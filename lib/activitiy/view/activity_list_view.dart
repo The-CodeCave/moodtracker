@@ -4,7 +4,6 @@ import 'package:moodtracker/activitiy/view/activity_add_dialog.dart';
 import 'package:moodtracker/activitiy/view/activity_list_tile.dart';
 
 import '../bloc/activity_bloc.dart';
-import '../model/activity.dart';
 import 'activity_filter_dialog.dart';
 
 class ActivityListView extends StatelessWidget {
@@ -16,6 +15,8 @@ class ActivityListView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(title),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
           actions: [
             IconButton(
               onPressed: () {
@@ -24,30 +25,44 @@ class ActivityListView extends StatelessWidget {
                     builder: (context) {
                       return const ActivityAddDialog();
                     });
-                Activity a = Activity(
-                  id: '',
-                  name: 'Test',
-                  category: ActivityCategory.hobby,
-                  rating: ActivityRating.bad,
-                );
-                context.read<ActivityBloc>().add(ActivityAddEvent(a));
+                // TODO: adapt this to dialog result
+                // Activity a = Activity(
+                //   id: '',
+                //   name: 'Test',
+                //   category: ActivityCategory.hobby,
+                //   rating: ActivityRating.bad,
+                // );
+                // context.read<ActivityBloc>().add(ActivityAddEvent(a));
               },
               icon: Icon(Icons.add),
             ),
-            IconButton(
-              onPressed: () {
-                final bloc = context.read<ActivityBloc>();
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return BlocProvider.value(
-                      value: bloc,
-                      child: ActivityFilterDialog(),
-                    );
-                  },
+            BlocBuilder<ActivityBloc, ActivityState>(
+              builder: (context, state) {
+                Color? iconColor;
+                if (state.filter != null) {
+                  iconColor = Theme.of(context).colorScheme.inversePrimary;
+                }
+                return IconButton(
+                  onPressed: state is ActivityLoadingState
+                      ? null
+                      : () {
+                          final ActivityBloc bloc = context.read<ActivityBloc>();
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return BlocProvider.value(
+                                value: bloc,
+                                child: ActivityFilterDialog(),
+                              );
+                            },
+                          );
+                        },
+                  icon: Icon(
+                    Icons.filter_list,
+                    color: iconColor,
+                  ),
                 );
               },
-              icon: Icon(Icons.filter_list),
             ),
           ],
         ),
@@ -58,13 +73,13 @@ class ActivityListView extends StatelessWidget {
         body: BlocBuilder(
           bloc: context.read<ActivityBloc>(),
           builder: (context, state) {
-            if (state is ActivityInitial || state is ActivityLoading) {
+            if (state is ActivityLoadingState) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is ActivityLoaded) {
+            } else if (state is ActivityListUpdatedState) {
               return ListView.builder(
-                itemCount: state.activities.length,
+                itemCount: state.filteredList.length,
                 itemBuilder: (context, index) {
-                  return ActivityListTile(activity: state.activities[index]);
+                  return ActivityListTile(activity: state.filteredList[index]);
                 },
               );
             } else {

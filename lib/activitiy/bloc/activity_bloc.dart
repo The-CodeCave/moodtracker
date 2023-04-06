@@ -12,36 +12,30 @@ part 'activity_state.dart';
 
 class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   final ActivityService _service = ActivityService();
-  ActivityBloc() : super(ActivityInitial()) {
+  StreamSubscription? _subscription;
+  ActivityBloc() : super(ActivityLoadingState()) {
+    on<ActivityListUpdatedEvent>(_onActivityListUpdatedEvent);
     on<ActivityAddEvent>(_onActivityAddEvent);
-    on<ActivityFetchEvent>(_onActivityFetchEvent);
-    on<ActivityApplyFilterEvent>(_onActivityFetchEvent);
-    add(ActivityFetchEvent());
+    on<ActivityApplyFilterEvent>(_onActivityApplyFilterEvent);
+
+    _subscription = _service.activityList().listen((activityList) => add(ActivityListUpdatedEvent(activityList: activityList)));
   }
 
-  FutureOr<void> _onActivityAddEvent(
-      ActivityAddEvent event, Emitter<ActivityState> emit) {
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
+
+  FutureOr<void> _onActivityAddEvent(ActivityAddEvent event, Emitter<ActivityState> emit) {
     _service.add(event.activity);
   }
 
-  FutureOr<void> _onActivityFetchEvent(
-      ActivityFetchEvent event, Emitter<ActivityState> emit) async {
-    final activities = await _service.get();
-    if (event is ActivityApplyFilterEvent) {
-      emit(
-        ActivityLoaded(
-          activities
-              //TODO: Needs refactoring. Is too complex for "one liner", but works for now
-              .where((element) => event.filter.selectedCategory != null
-                  ? (element.category == event.filter.selectedCategory)
-                  : true &&
-                      element.name.contains(event.filter.nameFilter ?? ""))
-              .toList(),
-          event.filter,
-        ),
-      );
-    } else {
-      emit(ActivityLoaded(activities, null));
-    }
+  FutureOr<void> _onActivityListUpdatedEvent(ActivityListUpdatedEvent event, Emitter<ActivityState> emit) async {
+    emit(ActivityListUpdatedState(activityList: event.activityList));
+  }
+
+  FutureOr<void> _onActivityApplyFilterEvent(ActivityApplyFilterEvent event, Emitter<ActivityState> emit) {
+    emit(ActivityListUpdatedState(activityList: state.activityList, filter: event.filter));
   }
 }

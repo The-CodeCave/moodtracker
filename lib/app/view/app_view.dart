@@ -71,6 +71,7 @@ class AppView extends StatelessWidget {
         onSurfaceVariant: Color(0xFF42474C),
         outline: Color(0xFF72787D),
         outlineVariant: Color(0xFFCAC4D0),
+        inversePrimary: Color(0xFFE57900),
       ),
       useMaterial3: true,
     );

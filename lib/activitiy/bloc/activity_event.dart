@@ -12,9 +12,12 @@ class ActivityAddEvent extends ActivityEvent {
   const ActivityAddEvent(this.activity);
 }
 
-class ActivityFetchEvent extends ActivityEvent {}
+class ActivityListUpdatedEvent extends ActivityEvent {
+  final List<Activity> activityList;
+  const ActivityListUpdatedEvent({required this.activityList});
+}
 
-class ActivityApplyFilterEvent extends ActivityFetchEvent {
-  final ActivityFilter filter;
-  ActivityApplyFilterEvent(this.filter) : super();
+class ActivityApplyFilterEvent extends ActivityEvent {
+  final ActivityFilter? filter;
+  const ActivityApplyFilterEvent({this.filter});
 }
