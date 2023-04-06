@@ -11,6 +11,8 @@ class ActivityFilter {
     this.nameFilter,
   });
 
+  bool get isActive => nameFilter != null || selectedCategory != null;
+
   ActivityFilter copyWith({
     ActivityCategory? selectedCategory,
     String? nameFilter,

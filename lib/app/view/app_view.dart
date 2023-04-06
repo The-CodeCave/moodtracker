@@ -44,11 +44,13 @@ class AppView extends StatelessWidget {
   // This way all colors will be set for dialogs, appbars, cards, containers and so on
   // There will be only a few things left to fix manually
   ThemeData _buildTheme(BuildContext context) {
+    Color primary = Color(0xFF006590);
+    Color onPrimary = Color(0xFFFFFFFF);
     return Theme.of(context).copyWith(
       colorScheme: ColorScheme(
         brightness: Brightness.light,
-        primary: Color(0xFF006590),
-        onPrimary: Color(0xFFFFFFFF),
+        primary: primary,
+        onPrimary: onPrimary,
         primaryContainer: Color(0xFFC8E6FF),
         onPrimaryContainer: Color(0xFF001E2E),
         secondary: Color(0xFF52606C),
@@ -72,6 +74,10 @@ class AppView extends StatelessWidget {
         outline: Color(0xFF72787D),
         outlineVariant: Color(0xFFCAC4D0),
         inversePrimary: Color(0xFFE57900),
+      ),
+      appBarTheme: AppBarTheme(
+        color: primary,
+        foregroundColor: onPrimary,
       ),
       useMaterial3: true,
     );

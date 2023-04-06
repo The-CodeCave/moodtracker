@@ -15,8 +15,6 @@ class ActivityListView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(title),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
           actions: [
             IconButton(
               onPressed: () {
@@ -39,7 +37,7 @@ class ActivityListView extends StatelessWidget {
             BlocBuilder<ActivityBloc, ActivityState>(
               builder: (context, state) {
                 Color? iconColor;
-                if (state.filter != null) {
+                if (state.filter?.isActive == true) {
                   iconColor = Theme.of(context).colorScheme.inversePrimary;
                 }
                 return IconButton(
