@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moodtracker/activitiy/view/activity_add_dialog.dart';
 import 'package:moodtracker/activitiy/view/activity_list_tile.dart';
 
+import '../bloc/activity_add_dialog_bloc.dart';
 import '../bloc/activity_bloc.dart';
+import '../model/activity.dart';
 import 'activity_filter_dialog.dart';
 
 class ActivityListView extends StatelessWidget {
@@ -18,19 +20,19 @@ class ActivityListView extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const ActivityAddDialog();
-                    });
-                // TODO: adapt this to dialog result
-                // Activity a = Activity(
-                //   id: '',
-                //   name: 'Test',
-                //   category: ActivityCategory.hobby,
-                //   rating: ActivityRating.bad,
-                // );
-                // context.read<ActivityBloc>().add(ActivityAddEvent(a));
+                showDialog<Activity?>(
+                  context: context,
+                  builder: (context) {
+                    return BlocProvider(
+                      create: (context) => ActivityAddDialogBloc(),
+                      child: ActivityAddDialog(),
+                    );
+                  },
+                ).then((value) {
+                  if (value != null) {
+                    // context.read<ActivityBloc>().add(ActivityAddEvent(value));
+                  }
+                });
               },
               icon: Icon(Icons.add),
             ),
