@@ -7,19 +7,16 @@ abstract class ActivityAddDialogEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ActivityAddDialogNameChangedEvent extends ActivityAddDialogEvent {
+class ActivityAddDialogChangedEvent extends ActivityAddDialogEvent {
+  final String? name;
+  final String? hours;
+  final Set<String>? selectedSegments;
+  const ActivityAddDialogChangedEvent({this.name, this.hours, this.selectedSegments});
+}
+
+class ActivityAddDialogCreateEvent extends ActivityAddDialogEvent {
   final String name;
-  const ActivityAddDialogNameChangedEvent(this.name);
-}
-
-class ActivityAddDialogHoursChangedEvent extends ActivityAddDialogEvent {
   final String hours;
-  const ActivityAddDialogHoursChangedEvent(this.hours);
-}
 
-class ActivityAddDialogSelectedSegmentsChangedEvent extends ActivityAddDialogEvent {
-  final Set<String> selectedSegments;
-  const ActivityAddDialogSelectedSegmentsChangedEvent(this.selectedSegments);
+  const ActivityAddDialogCreateEvent({required this.name, required this.hours});
 }
-
-class ActivityAddDialogCreateEvent extends ActivityAddDialogEvent {}

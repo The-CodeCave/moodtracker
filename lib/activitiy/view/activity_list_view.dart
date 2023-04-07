@@ -18,23 +18,30 @@ class ActivityListView extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
           actions: [
-            IconButton(
-              onPressed: () {
-                showDialog<Activity?>(
-                  context: context,
-                  builder: (context) {
-                    return BlocProvider(
-                      create: (context) => ActivityAddDialogBloc(),
-                      child: ActivityAddDialog(),
-                    );
-                  },
-                ).then((value) {
-                  if (value != null) {
-                    // context.read<ActivityBloc>().add(ActivityAddEvent(value));
-                  }
-                });
+            BlocBuilder<ActivityBloc, ActivityState>(
+              builder: (context, state) {
+                return IconButton(
+                  onPressed: state is ActivityLoadingState
+                      ? null
+                      : () {
+                          showDialog<Activity?>(
+                            context: context,
+                            builder: (context) {
+                              return BlocProvider(
+                                create: (context) => ActivityAddDialogBloc(),
+                                child: ActivityAddDialog(),
+                              );
+                            },
+                          ).then((value) {
+                            if (value != null) {
+                              // TODO: catch errors in bloc after this event and notify with listener and scaffold messenger
+                              context.read<ActivityBloc>().add(ActivityAddEvent(value));
+                            }
+                          });
+                        },
+                  icon: Icon(Icons.add),
+                );
               },
-              icon: Icon(Icons.add),
             ),
             BlocBuilder<ActivityBloc, ActivityState>(
               builder: (context, state) {
