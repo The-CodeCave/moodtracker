@@ -48,6 +48,17 @@ enum ActivityCategory {
         return ActivityCategory.work;
     }
   }
+
+  static ActivityCategory fromSegments(Set<String> segments) {
+    switch (segments.first) {
+      case 'hobby':
+        return ActivityCategory.hobby;
+      case 'obligation':
+        return ActivityCategory.obligation;
+      default:
+        return ActivityCategory.work;
+    }
+  }
 }
 
 extension ActivityCategoryExtension on ActivityCategory {
