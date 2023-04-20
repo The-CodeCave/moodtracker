@@ -39,7 +39,9 @@ class ActivityAddDialog extends StatelessWidget {
             CancelButton(),
             SaveButton(
               onPressed: () {
-                context.read<ActivityAddDialogBloc>().add(ActivityAddDialogCreateEvent(
+                context
+                    .read<ActivityAddDialogBloc>()
+                    .add(ActivityAddDialogCreateEvent(
                       name: nameController.text,
                       hours: hoursController.text,
                     ));
@@ -58,7 +60,8 @@ class ActivityAddDialog extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildChildren(BuildContext context, ActivityAddDialogState state) {
+  List<Widget> _buildChildren(
+      BuildContext context, ActivityAddDialogState state) {
     String? nameError;
     String? hoursError;
     String? selectedSegmentsError;
@@ -98,22 +101,21 @@ class ActivityAddDialog extends StatelessWidget {
           ButtonSegment(
             value: ActivityCategory.work.name,
             icon: Icon(Icons.work),
-            label: Text(ActivityCategory.work.toDisplayName()),
           ),
           ButtonSegment(
             value: ActivityCategory.obligation.name,
             icon: Icon(Icons.home),
-            label: Text(ActivityCategory.obligation.toDisplayName()),
           ),
           ButtonSegment(
             value: ActivityCategory.hobby.name,
             icon: Icon(Icons.star),
-            label: Text(ActivityCategory.hobby.toDisplayName()),
           ),
         ],
         emptySelectionAllowed: true,
         selected: state.selectedSegments,
-        onSelectionChanged: (p0) => context.read<ActivityAddDialogBloc>().add(ActivityAddDialogChangedEvent(
+        onSelectionChanged: (p0) => context
+            .read<ActivityAddDialogBloc>()
+            .add(ActivityAddDialogChangedEvent(
               name: nameController.text,
               hours: hoursController.text,
               selectedSegments: p0,
