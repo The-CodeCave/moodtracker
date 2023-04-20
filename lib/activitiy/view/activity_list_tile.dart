@@ -34,15 +34,53 @@ class ActivityListTile extends StatelessWidget {
   Widget _buildTrailing() {
     // TODO: build as row allow interaction only with last icon
     // TODO: the row shows the recent 5 ratings
-    switch (activity.rating) {
+    List<Widget> children = [];
+    for (var i = 0; i < activity.rating.length.clamp(0, 3); i++) {
+      children.add(
+        Positioned(
+          right: (11 * i).toDouble(),
+          top: 0,
+          bottom: 0,
+          child: Center(
+            child: _buildRatingIcon(activity.rating[i], index: i + 1),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 80,
+          child: Stack(
+            children: children,
+          ),
+        ),
+        _buildRatingIcon(ActivityRating.none)
+      ],
+    );
+  }
+
+  Widget _buildRatingIcon(ActivityRating rating, {int index = 0}) {
+    switch (rating) {
       case ActivityRating.bad:
-        return Icon(Icons.sentiment_very_dissatisfied);
+        return Icon(
+          Icons.sentiment_very_dissatisfied,
+          size: 25 * (1 - (index / 7)),
+        );
       case ActivityRating.neutral:
-        return Icon(Icons.sentiment_neutral);
+        return Icon(
+          Icons.sentiment_neutral,
+          size: 25 * (1 - (index / 7)),
+        );
       case ActivityRating.good:
-        return Icon(Icons.sentiment_very_satisfied);
+        return Icon(
+          Icons.sentiment_very_satisfied,
+          size: 25 * (1 - (index / 7)),
+        );
       default:
-        return Icon(Icons.do_disturb);
+        return Icon(Icons.do_disturb, size: 25 * (1 - (index / 7)));
     }
   }
 }

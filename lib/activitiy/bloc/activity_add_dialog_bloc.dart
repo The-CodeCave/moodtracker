@@ -8,13 +8,16 @@ import '../model/activity.dart';
 part 'activity_add_dialog_event.dart';
 part 'activity_add_dialog_state.dart';
 
-class ActivityAddDialogBloc extends Bloc<ActivityAddDialogEvent, ActivityAddDialogState> {
+class ActivityAddDialogBloc
+    extends Bloc<ActivityAddDialogEvent, ActivityAddDialogState> {
   ActivityAddDialogBloc() : super(ActivityAddDialogInitialState()) {
     on<ActivityAddDialogChangedEvent>(_onActivityAddDialogChangedEvent);
     on<ActivityAddDialogCreateEvent>(_onActivityAddDialogCreateEvent);
   }
 
-  FutureOr<void> _onActivityAddDialogChangedEvent(ActivityAddDialogChangedEvent event, Emitter<ActivityAddDialogState> emit) {
+  FutureOr<void> _onActivityAddDialogChangedEvent(
+      ActivityAddDialogChangedEvent event,
+      Emitter<ActivityAddDialogState> emit) {
     emit(ActivityAddDialogInitialState(
       name: event.name ?? state.name,
       hours: event.hours ?? state.hours,
@@ -22,12 +25,17 @@ class ActivityAddDialogBloc extends Bloc<ActivityAddDialogEvent, ActivityAddDial
     ));
   }
 
-  FutureOr<void> _onActivityAddDialogCreateEvent(ActivityAddDialogCreateEvent event, Emitter<ActivityAddDialogState> emit) {
+  FutureOr<void> _onActivityAddDialogCreateEvent(
+      ActivityAddDialogCreateEvent event,
+      Emitter<ActivityAddDialogState> emit) {
     String? nameError = _validateName(event.name);
     String? hoursError = _validateHours(event.hours);
-    String? selectedSegementsError = _validateSelectedSegments(state.selectedSegments);
+    String? selectedSegementsError =
+        _validateSelectedSegments(state.selectedSegments);
 
-    bool isValid = nameError == null && hoursError == null && selectedSegementsError == null;
+    bool isValid = nameError == null &&
+        hoursError == null &&
+        selectedSegementsError == null;
 
     if (isValid) {
       try {
@@ -37,7 +45,8 @@ class ActivityAddDialogBloc extends Bloc<ActivityAddDialogEvent, ActivityAddDial
         Activity activity = Activity(
           name: event.name,
           category: ActivityCategory.fromSegments(state.selectedSegments),
-          rating: ActivityRating.none,
+          rating: [ActivityRating.none],
+          hours: hoursNum,
         );
         emit(ActivityAddDialogSuccessState(activity));
       } catch (_) {
