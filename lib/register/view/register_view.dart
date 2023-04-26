@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moodtracker/app/bloc/app_bloc.dart';
 import 'package:moodtracker/register/bloc/register_bloc.dart';
 
 import '../../router/app_router.dart';
@@ -15,7 +14,7 @@ class RegisterView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final username = useState<String?>(null);
-    final username_passkey = useState<String?>(null);
+    final usernamePasskey = useState<String?>(null);
 
     final password = useState<String?>(null);
     final hidePasswort = useState<bool>(true);
@@ -40,14 +39,13 @@ class RegisterView extends HookWidget {
               children: [
                 SizedBox(height: spacerHeight),
                 Expanded(
-                    flex: 5,
+                    flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child:
-                          Image.asset("assets/login_logo_complete_alpha.png"),
+                      child: Image.asset("assets/login_logo_complete_alpha.png"),
                     )),
                 Expanded(
-                  flex: 6,
+                  flex: 2,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(48),
@@ -58,8 +56,7 @@ class RegisterView extends HookWidget {
                         color: Color(0xFF635A78),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 30, bottom: 30),
+                        padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -93,9 +90,7 @@ class RegisterView extends HookWidget {
                                     hidePasswort.value = !hidePasswort.value;
                                   },
                                   icon: Icon(
-                                    hidePasswort.value
-                                        ? FontAwesomeIcons.eye
-                                        : FontAwesomeIcons.eyeSlash,
+                                    hidePasswort.value ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
                                   ),
                                 ),
                               ),
@@ -106,34 +101,24 @@ class RegisterView extends HookWidget {
                                 Expanded(
                                   child: SizedBox(
                                     height: 40,
-                                    child: BlocBuilder<RegisterBloc,
-                                        RegisterState>(
+                                    child: BlocBuilder<RegisterBloc, RegisterState>(
                                       builder: (context, state) {
                                         return ElevatedButton(
                                           style: ButtonStyle(),
-                                          onPressed: (username.value == null ||
-                                                      password.value == null) ||
-                                                  state is RegisterLoading
+                                          onPressed: (username.value == null || password.value == null) || state is RegisterLoading
                                               ? null
                                               : () {
-                                                  context
-                                                      .read<RegisterBloc>()
-                                                      .add(
+                                                  context.read<RegisterBloc>().add(
                                                         RegisterButtonPressed(
-                                                          username:
-                                                              username.value!,
-                                                          password:
-                                                              password.value!,
+                                                          username: username.value!,
+                                                          password: password.value!,
                                                         ),
                                                       );
                                                 },
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              state is RegisterLoading
-                                                  ? CircularProgressIndicator()
-                                                  : Icon(Icons.login),
+                                              state is RegisterLoading ? CircularProgressIndicator() : Icon(Icons.login),
                                               SizedBox(width: 10),
                                               Text("Registrieren"),
                                             ],
@@ -151,8 +136,7 @@ class RegisterView extends HookWidget {
                                 Expanded(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
-                                  child:
-                                      Container(color: Colors.white, height: 1),
+                                  child: Container(color: Colors.white, height: 1),
                                 )),
                                 Text(
                                   "oder",
@@ -161,15 +145,13 @@ class RegisterView extends HookWidget {
                                 Expanded(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
-                                  child:
-                                      Container(color: Colors.white, height: 1),
+                                  child: Container(color: Colors.white, height: 1),
                                 )),
                               ],
                             ),
                             SizedBox(height: spacerHeight),
                             TextFormField(
-                              onChanged: (value) =>
-                                  username_passkey.value = value,
+                              onChanged: (value) => usernamePasskey.value = value,
                               decoration: InputDecoration(
                                 labelText: "E-Mail",
                                 // You can use filled: true with material color scheme
@@ -191,12 +173,12 @@ class RegisterView extends HookWidget {
                                 return MaterialButton(
                                   elevation: 0.0,
                                   onPressed: () async {
-                                    if (username_passkey.value != null &&
-                                        username_passkey.value!.isNotEmpty &&
+                                    if (usernamePasskey.value != null &&
+                                        usernamePasskey.value!.isNotEmpty &&
                                         state is! RegisterLoadingPasskey) {
                                       context.read<RegisterBloc>().add(
                                             RegisterWithPasskey(
-                                              username: username_passkey.value!,
+                                              username: usernamePasskey.value!,
                                             ),
                                           );
                                     }
@@ -211,18 +193,15 @@ class RegisterView extends HookWidget {
                                               height: 38,
                                               width: 38,
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(5.0),
-                                                child:
-                                                    CircularProgressIndicator(
+                                                padding: const EdgeInsets.all(5.0),
+                                                child: CircularProgressIndicator(
                                                   color: Colors.white,
                                                 ),
                                               ),
                                             ),
                                           )
                                         : Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Icon(
                                                 FontAwesomeIcons.key,
@@ -232,11 +211,7 @@ class RegisterView extends HookWidget {
                                               SizedBox(width: 15),
                                               Text(
                                                 "Mit Passkey registrieren",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                                               ),
                                             ],
                                           ),
@@ -247,15 +222,11 @@ class RegisterView extends HookWidget {
                             Expanded(
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   // Use TextButton instead of gesture detector, improves mouse hover for web?
                                   TextButton(
-                                    style: TextButton.styleFrom(
-                                        foregroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .onTertiary),
+                                    style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onTertiary),
                                     onPressed: () {
                                       context.go(AppRoutes.login);
                                     },
@@ -263,9 +234,7 @@ class RegisterView extends HookWidget {
                                   ),
                                   TextButton(
                                     style: TextButton.styleFrom(
-                                      foregroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .onTertiary,
+                                      foregroundColor: Theme.of(context).colorScheme.onTertiary,
                                     ),
                                     onPressed: () {
                                       //TODO: Implement Forgot Password

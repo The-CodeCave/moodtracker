@@ -67,8 +67,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '172807214156',
     projectId: 'moodtracker-e0978',
     storageBucket: 'moodtracker-e0978.appspot.com',
-    iosClientId: '172807214156-kfrrpibi51sj8gtrqcvan8r6t9a1fmel.apps.googleusercontent.com',
-    iosBundleId: 'com.example.moodtracker',
+    iosClientId:
+        '172807214156-kfrrpibi51sj8gtrqcvan8r6t9a1fmel.apps.googleusercontent.com',
+    iosBundleId: 'de.thecodecave.moodtracker',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '172807214156',
     projectId: 'moodtracker-e0978',
     storageBucket: 'moodtracker-e0978.appspot.com',
-    iosClientId: '172807214156-kfrrpibi51sj8gtrqcvan8r6t9a1fmel.apps.googleusercontent.com',
-    iosBundleId: 'com.example.moodtracker',
+    iosClientId:
+        '172807214156-kfrrpibi51sj8gtrqcvan8r6t9a1fmel.apps.googleusercontent.com',
+    iosBundleId: 'de.thecodecave.moodtracker',
   );
 }
