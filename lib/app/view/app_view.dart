@@ -40,9 +40,6 @@ class AppView extends StatelessWidget {
     );
   }
 
-  // TODO: incroproate the official material theme?
-  // This way all colors will be set for dialogs, appbars, cards, containers and so on
-  // There will be only a few things left to fix manually
   ThemeData _buildTheme(BuildContext context) {
     Color primary = Color(0xFF006590);
     Color onPrimary = Color(0xFFFFFFFF);
