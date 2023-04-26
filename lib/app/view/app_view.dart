@@ -28,37 +28,7 @@ class AppView extends StatelessWidget {
               routerConfig: getIt.get<AppRouter>(),
               debugShowCheckedModeBanner: false,
               title: 'Moodtracker',
-              theme: ThemeData(
-                  textTheme: TextTheme(
-                      headline3: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500)),
-                  elevatedButtonTheme: ElevatedButtonThemeData(
-                      style: ButtonStyle(
-                    elevation: MaterialStateProperty.all<double>(0.0),
-                    backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF006590)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100.0),
-                      ),
-                    ),
-                  )),
-                  textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: Color(0xFF006590),
-                  ),
-                  inputDecorationTheme: InputDecorationTheme(
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF006590)),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF42474C)),
-                    ),
-                    fillColor: Color(0xFFDEE3E9),
-                    filled: true,
-                    labelStyle: TextStyle(color: Color(0xFF006590)),
-                    focusColor: Color(0xFF006590),
-                  )),
+              theme: _buildTheme(context),
             );
           } else {
             return const Center(
@@ -67,6 +37,46 @@ class AppView extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  ThemeData _buildTheme(BuildContext context) {
+    Color primary = Color(0xFF006590);
+    Color onPrimary = Color(0xFFFFFFFF);
+    return Theme.of(context).copyWith(
+      colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: primary,
+        onPrimary: onPrimary,
+        primaryContainer: Color(0xFFC8E6FF),
+        onPrimaryContainer: Color(0xFF001E2E),
+        secondary: Color(0xFF52606C),
+        onSecondary: Color(0xFFFFFFFF),
+        secondaryContainer: Color(0xFFD5E4F2),
+        onSecondaryContainer: Color(0xFF0F1D27),
+        tertiary: Color(0xFF635A78),
+        onTertiary: Color(0xFFFFFFFF),
+        tertiaryContainer: Color(0xFFE9DDFF),
+        onTertiaryContainer: Color(0xFF1F1731),
+        error: Color(0xFFBA1A1A),
+        onError: Color(0xFFFFFFFF),
+        errorContainer: Color(0xFFFFDAD6),
+        onErrorContainer: Color(0xFF410002),
+        background: Color(0xFFFCFCFE),
+        onBackground: Color(0xFF1A1C1E),
+        surface: Color(0xFFFCFCFE),
+        onSurface: Color(0xFF1A1C1E),
+        surfaceVariant: Color(0xFFDEE3E9),
+        onSurfaceVariant: Color(0xFF42474C),
+        outline: Color(0xFF72787D),
+        outlineVariant: Color(0xFFCAC4D0),
+        inversePrimary: Color(0xFFE57900),
+      ),
+      appBarTheme: AppBarTheme(
+        color: primary,
+        foregroundColor: onPrimary,
+      ),
+      useMaterial3: true,
     );
   }
 }

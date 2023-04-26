@@ -11,13 +11,18 @@ class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
+class LoginLaodingPasskey extends LoginState {}
+
+class LoginLoadingGoogle extends LoginState {}
+
+class LoginLoadingApple extends LoginState {}
+
 class LoginSuccess extends LoginState {
   final User? user;
 
   const LoginSuccess({required this.user});
 
   @override
-  //TODO: What to do in this case?
   List<Object> get props => [user ?? ""];
 }
 

@@ -49,6 +49,10 @@ dependencies:
   sign_in_with_apple: ^4.3.0
   crypto: ^3.0.2
 
+  cloud_firestore: ^4.4.3
+  flutter_passkeys: 
+    path: ./packages/flutter_passkeys
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

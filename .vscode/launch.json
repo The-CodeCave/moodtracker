@@ -8,6 +8,7 @@
             "name": "moodtracker",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main.dart",
             "args": [
                 "-d",
                 "chrome",

@@ -18,21 +18,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<RegisterButtonPressed>(_onRegisterButtonPressed);
     on<GoogleLoginButtonPressed>(_onGoogleLoginButtonPressed);
     on<AppleLoginButtonPressed>(_onAppleLoginButtonPressed);
+    on<LoginWithPasskey>(_onLoginWithPasskey);
   }
 
-  FutureOr<void> _onLoginButtonPressed(
-      LoginButtonPressed event, Emitter<LoginState> emit) async {
+  FutureOr<void> _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
     try {
       final user = await _loginService.login(event.username, event.password);
       emit(LoginSuccess(user: user));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(LoginError(message: e.toString()));
     }
   }
 
-    FutureOr<void> _onGoogleLoginButtonPressed(
-      GoogleLoginButtonPressed event, Emitter<LoginState> emit) async {
+  FutureOr<void> _onGoogleLoginButtonPressed(GoogleLoginButtonPressed event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
     try {
       final user = await _loginService.loginWithGoogle();
@@ -42,8 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  FutureOr<void> _onAppleLoginButtonPressed(
-      AppleLoginButtonPressed event, Emitter<LoginState> emit) async {
+  FutureOr<void> _onAppleLoginButtonPressed(AppleLoginButtonPressed event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
     try {
       final user = await _loginService.signInWithApple();
@@ -53,13 +51,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  FutureOr<void> _onRegisterButtonPressed(
-      RegisterButtonPressed event, Emitter<LoginState> emit) async {
+  FutureOr<void> _onRegisterButtonPressed(RegisterButtonPressed event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
+  }
+
+  FutureOr<void> _onLoginWithPasskey(LoginWithPasskey event, Emitter<LoginState> emit) async {
+    emit(LoginLaodingPasskey());
     try {
-      final user = await _loginService.register(event.username, event.password);
-      emit(LoginSuccess(user: user));
-    } on Exception catch (e) {
+      final user = await _loginService.loginWithPasskey();
+      if (user != null) {
+        emit(LoginSuccess(user: user));
+      } else {
+        emit(LoginError(message: 'Invalid credentials'));
+      }
+    } catch (e) {
       emit(LoginError(message: e.toString()));
     }
   }

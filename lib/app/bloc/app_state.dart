@@ -27,7 +27,7 @@ class AppUserUnauthenticatedState extends AppState {
 }
 
 class AppUserAuthenticatedState extends AppState {
-  const AppUserAuthenticatedState(User user) : super(isInitialized: true, isServiceRegistered: false, user: user);
+  const AppUserAuthenticatedState(User user) : super(isInitialized: true, isServiceRegistered: true, user: user);
 }
 
 class AppErrorState extends AppState {

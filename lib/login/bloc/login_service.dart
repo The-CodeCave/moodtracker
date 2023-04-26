@@ -5,23 +5,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_passkeys/flutter_passkeys.dart';
+import 'package:http/http.dart' as http;
+import 'package:moodtracker/constants.dart';
+import 'package:moodtracker/setup_services.dart';
+
 class LoginService {
   late final FirebaseAuth _auth;
 
   LoginService() {
-    _auth = FirebaseAuth.instance;
+    _auth = getIt.get<FirebaseAuth>();
   }
 
   User? getUser() {
     return _auth.currentUser;
   }
 
-    static String generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+  static String generateNonce([int length = 32]) {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 
   /// Returns the sha256 hash of [input] in hex notation.
@@ -59,9 +64,8 @@ class LoginService {
     await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
     if (FirebaseAuth.instance.currentUser != null) {
-       FirebaseAuth.instance.currentUser!.updateDisplayName(
-          '${appleCredential.givenName} ${appleCredential.familyName}');
-      
+      FirebaseAuth.instance.currentUser!.updateDisplayName('${appleCredential.givenName} ${appleCredential.familyName}');
+
       return _auth.currentUser;
     } else {
       throw 'Login failed';
@@ -104,25 +108,56 @@ class LoginService {
     }
   }
 
-  Future<User?> register(String email, String password) async {
+  Future<User?> register(String email, String password) async {}
+  Future<User?> loginWithPasskey() async {
     try {
-      final userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+      final res = await http.get(
+        Uri.parse("$functionsUrlBase/generateAuthenticationOps?debug=$kDebugMode"),
       );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        throw 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        throw 'The account already exists for that email.';
-      } else if (e.code == 'invalid-email') {
-        throw 'Invalid email.';
+      if (res.statusCode == 200) {
+        final data = res.body;
+        final decoded = jsonDecode(data);
+
+        final webatuhresp = await getIt.get<FlutterPasskeys>().authenticateWithPasskey(
+              relyingParty: decoded["rpId"],
+              challenge: decoded["challenge"],
+            );
+        try {
+          final token = await http.post(
+            Uri.parse(
+              "$functionsUrlBase/confirmAuthentication?debug=$kDebugMode",
+            ),
+            body: jsonEncode({
+              "transactionId": decoded["transactionId"],
+              "userID": webatuhresp.userId,
+              "clientResponse": {
+                "id": webatuhresp.credId,
+                "rawId": base64UrlEncode(webatuhresp.rawId).replaceAll("=", ""),
+                "type": "public-key",
+                "response": {
+                  "clientDataJSON": base64UrlEncode(webatuhresp.clientDataJSON),
+                  "signature": base64UrlEncode(webatuhresp.signature),
+                  "authenticatorData": base64UrlEncode(webatuhresp.authenticatorData),
+                },
+                "clientExtensionResults": "{}",
+              },
+            }),
+          );
+          if (token.statusCode == 200) {
+            final data = token.body;
+            final userCredential = await _auth.signInWithCustomToken(data);
+            return userCredential.user;
+          } else {
+            throw 'Unknown error.';
+          }
+        } on Exception catch (_) {
+          rethrow;
+        }
       } else {
         throw 'Unknown error.';
       }
+    } on Exception catch (_) {
+      rethrow;
     }
   }
-
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
 }
