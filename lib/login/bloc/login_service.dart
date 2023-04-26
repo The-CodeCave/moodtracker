@@ -4,8 +4,6 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_passkeys/flutter_passkeys.dart';
 import 'package:http/http.dart' as http;
@@ -108,7 +106,11 @@ class LoginService {
     }
   }
 
-  Future<User?> register(String email, String password) async {}
+  Future<User?> register(String email, String password) async {
+    // TODO: implement register function
+    return null;
+  }
+
   Future<User?> loginWithPasskey() async {
     try {
       final res = await http.get(

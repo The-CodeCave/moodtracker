@@ -110,7 +110,6 @@ class LoginView extends HookWidget {
                                         height: 40,
                                         child: BlocBuilder<LoginBloc, LoginState>(
                                           builder: (context, state) {
-                                            // TODO: m3 use filled button instead of elevated button
                                             return FilledButton.icon(
                                               onPressed: (username.value == null || password.value == null) || state is LoginLoading
                                                   ? null
@@ -147,13 +146,11 @@ class LoginView extends HookWidget {
                                     child: Container(color: Colors.white, height: 1),
                                   )),
                                   Text(
-                                    // TODO: check this example, this way the labels are kept consistent through the app
                                     "oder",
                                     style: TextStyle(
                                       inherit: true,
                                       color: Theme.of(context).colorScheme.onTertiary,
                                     ),
-                                    //style: Theme.of(context).textTheme.headline3,
                                   ),
                                   Expanded(
                                       child: Padding(
