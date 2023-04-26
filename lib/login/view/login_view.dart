@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:moodtracker/login/bloc/login_service.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moodtracker/router/app_router.dart';
 
@@ -46,13 +44,13 @@ class LoginView extends HookWidget {
                 children: [
                   SizedBox(height: spacerHeight),
                   Expanded(
-                      flex: 5,
+                      flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Image.asset("assets/login_logo_complete_alpha.png"),
                       )),
                   Expanded(
-                    flex: 6,
+                    flex: 2,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(48),
@@ -102,6 +100,45 @@ class LoginView extends HookWidget {
                                 ),
                               ),
                               SizedBox(height: spacerHeight),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: BlocBuilder<LoginBloc, LoginState>(
+                                          builder: (context, state) {
+                                            // TODO: m3 use filled button instead of elevated button
+                                            return FilledButton.icon(
+                                              onPressed: (username.value == null || password.value == null) || state is LoginLoading
+                                                  ? null
+                                                  : () {
+                                                      context.read<LoginBloc>().add(
+                                                            LoginButtonPressed(
+                                                              username: username.value!,
+                                                              password: password.value!,
+                                                            ),
+                                                          );
+                                                    },
+                                              icon: state is LoginLoading
+                                                  ? SizedBox(
+                                                      height: Theme.of(context).textTheme.labelLarge?.fontSize,
+                                                      width: Theme.of(context).textTheme.labelLarge?.fontSize,
+                                                      child: CircularProgressIndicator(strokeWidth: 2.0),
+                                                    )
+                                                  : Icon(Icons.login),
+                                              label: Text("Login"),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: spacerHeight),
                               Row(
                                 children: [
                                   Expanded(
@@ -110,8 +147,13 @@ class LoginView extends HookWidget {
                                     child: Container(color: Colors.white, height: 1),
                                   )),
                                   Text(
+                                    // TODO: check this example, this way the labels are kept consistent through the app
                                     "oder",
-                                    style: Theme.of(context).textTheme.headline3,
+                                    style: TextStyle(
+                                      inherit: true,
+                                      color: Theme.of(context).colorScheme.onTertiary,
+                                    ),
+                                    //style: Theme.of(context).textTheme.headline3,
                                   ),
                                   Expanded(
                                       child: Padding(
@@ -120,7 +162,6 @@ class LoginView extends HookWidget {
                                   )),
                                 ],
                               ),
-                              SizedBox(height: spacerHeight),
                               BlocBuilder<LoginBloc, LoginState>(
                                 builder: (context, state) {
                                   return MaterialButton(
@@ -186,69 +227,6 @@ class LoginView extends HookWidget {
                                 },
                               ),
                               SizedBox(height: spacerHeight),
-                              Expanded(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 40,
-                                        child: BlocBuilder<LoginBloc, LoginState>(
-                                          builder: (context, state) {
-                                            // TODO: m3 use filled button instead of elevated button
-                                            return FilledButton.icon(
-                                              onPressed: (username.value == null || password.value == null) || state is LoginLoading
-                                                  ? null
-                                                  : () {
-                                                      context.read<LoginBloc>().add(
-                                                            LoginButtonPressed(
-                                                              username: username.value!,
-                                                              password: password.value!,
-                                                            ),
-                                                          );
-                                                    },
-                                              icon: state is LoginLoading
-                                                  ? SizedBox(
-                                                      height: Theme.of(context).textTheme.labelLarge?.fontSize,
-                                                      width: Theme.of(context).textTheme.labelLarge?.fontSize,
-                                                      child: CircularProgressIndicator(strokeWidth: 2.0),
-                                                    )
-                                                  : Icon(Icons.login),
-                                              label: Text("Login"),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: spacerHeight),
-                              Row(
-                                children: [
-                                  Expanded(
-                                      child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Container(color: Colors.white, height: 1),
-                                  )),
-                                  Text(
-                                    // TODO: check this example, this way the labels are kept consistent through the app
-                                    "oder",
-                                    style: TextStyle(
-                                      inherit: true,
-                                      color: Theme.of(context).colorScheme.onTertiary,
-                                    ),
-                                    //style: Theme.of(context).textTheme.headline3,
-                                  ),
-                                  Expanded(
-                                      child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Container(color: Colors.white, height: 1),
-                                  )),
-                                ],
-                              ),
-                              SizedBox(height: spacerHeight),
                               BlocBuilder<LoginBloc, LoginState>(
                                 builder: (context, state) {
                                   return MaterialButton(
@@ -296,92 +274,6 @@ class LoginView extends HookWidget {
                                 },
                               ),
                               SizedBox(height: !kIsWeb ? 2 : spacerHeight),
-                              BlocBuilder<LoginBloc, LoginState>(
-                                builder: (context, state) {
-                                  return MaterialButton(
-                                    elevation: 0.0,
-                                    onPressed: () async {
-                                      //TODO: Implement Google Login
-                                    },
-                                    height: 40,
-                                    color: Colors.white,
-                                    child: state is LoginLoadingGoogle
-                                        ? Center(
-                                            child: SizedBox(
-                                              height: 38,
-                                              width: 38,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(5.0),
-                                                child: CircularProgressIndicator(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Image.asset(
-                                                  'assets/googlelogo.png',
-                                                  height: 22,
-                                                ),
-                                                SizedBox(width: 15),
-                                                Text(
-                                                  "Sign in with Google",
-                                                  style: TextStyle(color: Color(0xFF757575), fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                  );
-                                },
-                              ),
-                              SizedBox(height: !kIsWeb ? 2 : spacerHeight),
-                              BlocBuilder<LoginBloc, LoginState>(
-                                builder: (context, state) {
-                                  return MaterialButton(
-                                    elevation: 0.0,
-                                    onPressed: () async {
-                                      //TODO: Implement Apple Login
-                                    },
-                                    height: 40,
-                                    color: Colors.black,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: state is LoginLoadingApple
-                                          ? Center(
-                                              child: SizedBox(
-                                                height: 38,
-                                                width: 38,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(5.0),
-                                                  child: CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  FontAwesomeIcons.apple,
-                                                  color: Colors.white,
-                                                  size: 22,
-                                                ),
-                                                SizedBox(width: 15),
-                                                Text(
-                                                  "Sign in with Apple",
-                                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                  );
-                                },
-                              ),
                               Expanded(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
