@@ -43,18 +43,16 @@ class LoginService {
   Future<User?> loginWithPasskey() async {
     try {
       final res = await http.get(
-        Uri.parse(
-            "$functionsUrlBase/generateAuthenticationOps?debug=$kDebugMode"),
+        Uri.parse("$functionsUrlBase/generateAuthenticationOps?debug=$kDebugMode"),
       );
       if (res.statusCode == 200) {
         final data = res.body;
         final decoded = jsonDecode(data);
 
-        final webatuhresp =
-            await getIt.get<FlutterPasskeys>().authenticateWithPasskey(
-                  relyingParty: decoded["rpId"],
-                  challenge: decoded["challenge"],
-                );
+        final webatuhresp = await getIt.get<FlutterPasskeys>().authenticateWithPasskey(
+              relyingParty: decoded["rpId"],
+              challenge: decoded["challenge"],
+            );
         try {
           final token = await http.post(
             Uri.parse(
@@ -70,8 +68,7 @@ class LoginService {
                 "response": {
                   "clientDataJSON": base64UrlEncode(webatuhresp.clientDataJSON),
                   "signature": base64UrlEncode(webatuhresp.signature),
-                  "authenticatorData":
-                      base64UrlEncode(webatuhresp.authenticatorData),
+                  "authenticatorData": base64UrlEncode(webatuhresp.authenticatorData),
                 },
                 "clientExtensionResults": "{}",
               },
@@ -84,14 +81,14 @@ class LoginService {
           } else {
             throw 'Unknown error.';
           }
-        } on Exception catch (e) {
-          throw 'Unknown error.';
+        } on Exception catch (_) {
+          rethrow;
         }
       } else {
         throw 'Unknown error.';
       }
-    } on Exception catch (e) {
-      throw 'Unknown error.';
+    } on Exception catch (_) {
+      rethrow;
     }
   }
 }

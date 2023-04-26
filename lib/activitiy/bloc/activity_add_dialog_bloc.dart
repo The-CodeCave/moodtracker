@@ -31,13 +31,13 @@ class ActivityAddDialogBloc extends Bloc<ActivityAddDialogEvent, ActivityAddDial
 
     if (isValid) {
       try {
-        // TODO: Implement hours function
         // TODO: rethink the use of rating
         int hoursNum = int.parse(event.hours);
         Activity activity = Activity(
           name: event.name,
           category: ActivityCategory.fromSegments(state.selectedSegments),
-          rating: ActivityRating.none,
+          rating: [ActivityRating.none],
+          hours: hoursNum,
         );
         emit(ActivityAddDialogSuccessState(activity));
       } catch (_) {

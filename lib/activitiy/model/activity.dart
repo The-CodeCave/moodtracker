@@ -4,23 +4,29 @@ class Activity {
   final String? id;
   final String name;
   final ActivityCategory category;
-  final ActivityRating rating;
+  final List<ActivityRating> rating;
+  final int hours;
 
   const Activity({
     this.id,
     required this.name,
     required this.category,
     required this.rating,
+    required this.hours,
   });
 
-  factory Activity.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  factory Activity.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     var category = ActivityCategory.fromString(snapshot['category']);
-    var rating = ActivityRating.fromString(snapshot['rating']);
+    List<dynamic> rating =
+        snapshot['rating'].map((e) => ActivityRating.fromString(e)).toList();
+    final cast = rating.cast<ActivityRating>().toList();
     return Activity(
       id: snapshot.id,
       name: snapshot['name'],
       category: category,
-      rating: rating,
+      rating: cast,
+      hours: snapshot['hours'],
     );
   }
 
@@ -28,7 +34,8 @@ class Activity {
     return {
       'name': name,
       'category': category.name,
-      'rating': rating.name,
+      'rating': rating.map((e) => e.name),
+      'hours': hours,
     };
   }
 }
