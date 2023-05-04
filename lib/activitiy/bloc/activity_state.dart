@@ -12,11 +12,16 @@ abstract class ActivityState extends Equatable {
     List<Activity> filteredList = activityList;
     String? nameFilter = filter?.nameFilter;
     if (nameFilter != null) {
-      filteredList = filteredList.where((element) => element.name.toLowerCase().contains(nameFilter.toLowerCase())).toList();
+      filteredList = filteredList
+          .where((element) =>
+              element.name.toLowerCase().contains(nameFilter.toLowerCase()))
+          .toList();
     }
     ActivityCategory? category = filter?.selectedCategory;
     if (category != null) {
-      filteredList = filteredList.where((element) => element.category == category).toList();
+      filteredList = filteredList
+          .where((element) => element.category == category)
+          .toList();
     }
     return filteredList;
   }
@@ -29,6 +34,25 @@ class ActivityLoadingState extends ActivityState {}
 
 class ActivityListUpdatedState extends ActivityState {
   const ActivityListUpdatedState({
+    super.activityList,
+    super.filter,
+  });
+}
+
+class ActivityUpdateLoadingState extends ActivityState {
+  final Activity updatingActivity;
+
+  const ActivityUpdateLoadingState({
+    required this.updatingActivity,
+    super.activityList,
+    super.filter,
+  });
+}
+
+class ActivityUpdateErrorState extends ActivityState {
+  final String message;
+  const ActivityUpdateErrorState({
+    required this.message,
     super.activityList,
     super.filter,
   });

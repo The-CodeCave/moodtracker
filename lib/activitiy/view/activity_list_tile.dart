@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../model/activity.dart';
+import '../model/activity_category.dart';
+import '../model/activity_rating.dart';
 
 class ActivityListTile extends StatelessWidget {
   final Activity activity;
