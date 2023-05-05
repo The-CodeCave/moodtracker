@@ -20,7 +20,7 @@ class ActivityRatingEntry {
       id: json['id'],
       activityId: json['activityId'],
       userId: json['userId'],
-      rating: json['rating'],
+      rating: ActivityRating.fromString(json['rating']),
       timestamp: DateTime.parse(json['timestamp']),
     );
   }
@@ -30,7 +30,7 @@ class ActivityRatingEntry {
       'id': id,
       'activityId': activityId,
       'userId': userId,
-      'rating': rating,
+      'rating': rating.name,
       'timestamp': timestamp.toIso8601String(),
     };
   }

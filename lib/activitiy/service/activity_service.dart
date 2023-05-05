@@ -52,13 +52,10 @@ class ActivityService {
     await firestore.runTransaction((transaction) async {
       transaction.update(
         _buildWithConverter().doc(activityId),
-        {'rating': newRatingArray},
+        {'rating': newRatingArray.map((e) => e.name)},
       );
       transaction.set(
-        _buildWithConverter()
-            .doc(activityId)
-            .collection("ratings")
-            .doc(ratingId),
+        collectionRef.doc(activityId).collection("ratings").doc(ratingId),
         ratingEntry.toJson(),
       );
     });
