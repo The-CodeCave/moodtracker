@@ -11,7 +11,7 @@ class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
-class LoginLaodingPasskey extends LoginState {}
+class LoginLoadingPasskey extends LoginState {}
 
 class LoginLoadingGoogle extends LoginState {}
 

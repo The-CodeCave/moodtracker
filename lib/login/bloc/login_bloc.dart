@@ -56,7 +56,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _onLoginWithPasskey(LoginWithPasskey event, Emitter<LoginState> emit) async {
-    emit(LoginLaodingPasskey());
+    emit(LoginLoadingPasskey());
     try {
       final user = await _loginService.loginWithPasskey();
       if (user != null) {
