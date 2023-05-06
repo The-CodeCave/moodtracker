@@ -35,7 +35,7 @@ class LoginForm extends HookWidget {
           ),
           keyboardType: TextInputType.emailAddress,
         ),
-        SizedBox(height: defaultSpacerHeight),
+        SizedBox(height: defaultSpacerSize),
         TextFormField(
           onChanged: (value) => password.value = value,
           obscureText: hidePasswort.value,
@@ -51,7 +51,7 @@ class LoginForm extends HookWidget {
             ),
           ),
         ),
-        SizedBox(height: defaultSpacerHeight),
+        SizedBox(height: defaultSpacerSize),
         BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return FilledButton.icon(
