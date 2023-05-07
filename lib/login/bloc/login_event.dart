@@ -30,7 +30,8 @@ class LoginButtonPressed extends LoginRequestEvent {
 }
 
 class GoogleLoginButtonPressed extends LoginRequestEvent {
-  const GoogleLoginButtonPressed() : super(provider: LoginProvider.google);
+  final bool isWeb;
+  const GoogleLoginButtonPressed({required this.isWeb}) : super(provider: LoginProvider.google);
 }
 
 class AppleLoginButtonPressed extends LoginRequestEvent {
@@ -38,7 +39,7 @@ class AppleLoginButtonPressed extends LoginRequestEvent {
 }
 
 class LoginWithPasskey extends LoginRequestEvent {
-  const LoginWithPasskey() : super(provider: LoginProvider.appleKeyPass);
+  const LoginWithPasskey() : super(provider: LoginProvider.applePasskey);
 }
 
 class RegisterButtonPressed extends LoginEvent {

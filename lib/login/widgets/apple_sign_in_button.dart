@@ -19,6 +19,7 @@ class AppleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Use social button
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return SizedBox(

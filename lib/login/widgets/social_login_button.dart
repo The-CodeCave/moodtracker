@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moodtracker/helper/view/loading_icon.dart';
 import 'package:moodtracker/login/model/login_provider.dart';
 
 import '../../constants.dart';
@@ -26,42 +28,52 @@ class SocialLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return FilledButton(
-          style: FilledButton.styleFrom(backgroundColor: backgroundColor),
-          onPressed: () {
-            switch (provider) {
-              case LoginProvider.google:
-                context.read<LoginBloc>().add(GoogleLoginButtonPressed());
-                break;
-              case LoginProvider.apple:
-                context.read<LoginBloc>().add(AppleLoginButtonPressed());
-                break;
-              case LoginProvider.appleKeyPass:
-                context.read<LoginBloc>().add(LoginWithPasskey());
-                break;
-              default:
-                throw Exception(notImplemented);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(defaultSpacerSize),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox.square(
-                  dimension: fontSize,
-                  child: icon,
-                ),
-                SizedBox(width: defaultSpacerSize),
-                Text(
-                  provider.buttonText,
-                  style: TextStyle(color: foregroundColor, fontSize: fontSize, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
+        bool isLoading = _initIsLoading(state);
+
+        return FilledButton.icon(
+          style: FilledButton.styleFrom(
+            backgroundColor: backgroundColor,
+            minimumSize: Size.fromHeight(loginButtonHeight),
+          ),
+          onPressed: isLoading ? null : () => _onPressed(context),
+          icon: LoadingIcon(
+            icon: isLoading ? null : SizedBox.square(dimension: fontSize, child: icon),
+            color: foregroundColor,
+            size: fontSize,
+          ),
+          label: Text(
+            provider.buttonText,
+            style: TextStyle(color: foregroundColor, fontSize: fontSize, fontWeight: FontWeight.w500),
           ),
         );
       },
     );
+  }
+
+  bool _initIsLoading(LoginState state) {
+    if (state is LoginLoadingGoogle && provider == LoginProvider.google) {
+      return true;
+    } else if (state is LoginLoadingApple && provider == LoginProvider.apple) {
+      return true;
+    } else if (state is LoginLoadingPasskey && provider == LoginProvider.applePasskey) {
+      return true;
+    }
+    return false;
+  }
+
+  void _onPressed(BuildContext context) {
+    switch (provider) {
+      case LoginProvider.google:
+        context.read<LoginBloc>().add(GoogleLoginButtonPressed(isWeb: kIsWeb));
+        break;
+      case LoginProvider.apple:
+        context.read<LoginBloc>().add(AppleLoginButtonPressed());
+        break;
+      case LoginProvider.applePasskey:
+        context.read<LoginBloc>().add(LoginWithPasskey());
+        break;
+      default:
+        throw Exception(notImplemented);
+    }
   }
 }

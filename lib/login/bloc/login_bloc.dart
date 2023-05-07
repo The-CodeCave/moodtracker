@@ -17,9 +17,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     _loginService = getIt.get<LoginService>();
     on<LoginRequestEvent>(_onLoginRequestEvent);
     on<RegisterButtonPressed>(_onRegisterButtonPressed);
-    on<GoogleLoginButtonPressed>(_onGoogleLoginButtonPressed);
-    on<AppleLoginButtonPressed>(_onAppleLoginButtonPressed);
-    on<LoginWithPasskey>(_onLoginWithPasskey);
   }
 
   FutureOr<void> _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
@@ -33,9 +30,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _onGoogleLoginButtonPressed(GoogleLoginButtonPressed event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+    emit(LoginLoadingGoogle());
     try {
-      final user = await _loginService.loginWithGoogle();
+      User? user;
+      if (event.isWeb) {
+        user = await _loginService.signInWithGoogleWeb();
+      } else {
+        user = await _loginService.signInWithGoogle();
+      }
       emit(LoginSuccess(user: user));
     } on Exception catch (e) {
       emit(LoginError(message: e.toString()));
@@ -43,7 +45,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _onAppleLoginButtonPressed(AppleLoginButtonPressed event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+    emit(LoginLoadingApple());
     try {
       final user = await _loginService.signInWithApple();
       emit(LoginSuccess(user: user));

@@ -92,17 +92,39 @@ class LoginService {
     }
   }
 
-  Future<User?> loginWithGoogle() async {
-    try {
-      GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: [
-          'email',
-        ],
+  Future<User?> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn(
+      scopes: [
+        'email',
+      ],
+    ).signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    if (googleAuth != null) {
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-      await googleSignIn.signIn();
+
+      // Once signed in, return the UserCredential
+      await _auth.signInWithCredential(credential);
+      return _auth.currentUser;
+    }
+    return null;
+  }
+
+  Future<User?> signInWithGoogleWeb() async {
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+    try {
+      await _auth.signInWithPopup(googleProvider);
       return _auth.currentUser;
     } catch (e) {
-      throw 'Login failed';
+      rethrow;
     }
   }
 

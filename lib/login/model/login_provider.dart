@@ -2,7 +2,7 @@ enum LoginProvider {
   moodtracker,
   google,
   apple,
-  appleKeyPass,
+  applePasskey,
 }
 
 extension LoginProviderExtension on LoginProvider {
