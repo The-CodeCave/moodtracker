@@ -10,21 +10,22 @@ class LoginForm extends HookWidget {
     super.key,
   });
 
-  final String emailLabel = 'E-Mail';
-  final String passwordLabel = 'Passwort';
-  final String loginLabel = 'Login';
-  final email = useState<String?>(null);
-  final password = useState<String?>(null);
-  final hidePasswort = useState<bool>(true);
+  final String _emailLabel = 'E-Mail';
+  final String _passwordLabel = 'Passwort';
+  final String _loginLabel = 'Login';
+  final CircularProgressIndicator _progressIndicator = const CircularProgressIndicator(strokeWidth: 2.0);
+  final _email = useState<String?>(null);
+  final _password = useState<String?>(null);
+  final _hidePasswort = useState<bool>(true);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextFormField(
-          onChanged: (value) => email.value = value,
+          onChanged: (value) => _email.value = value,
           decoration: InputDecoration(
-            labelText: emailLabel,
+            labelText: _emailLabel,
             filled: true,
             suffixIcon: IconButton(
               onPressed: () {
@@ -35,36 +36,39 @@ class LoginForm extends HookWidget {
           ),
           keyboardType: TextInputType.emailAddress,
         ),
-        SizedBox(height: defaultSpacerSize),
+        const SizedBox(height: defaultSpacerSize),
         TextFormField(
-          onChanged: (value) => password.value = value,
-          obscureText: hidePasswort.value,
+          onChanged: (value) => _password.value = value,
+          obscureText: _hidePasswort.value,
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
-            labelText: passwordLabel,
+            labelText: _passwordLabel,
             filled: true,
             suffixIcon: IconButton(
               onPressed: () {
-                hidePasswort.value = !hidePasswort.value;
+                _hidePasswort.value = !_hidePasswort.value;
               },
-              icon: hidePasswort.value ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+              icon: _hidePasswort.value ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
             ),
           ),
         ),
-        SizedBox(height: defaultSpacerSize),
+        const SizedBox(height: defaultSpacerSize),
         BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
-            return FilledButton.icon(
-              style: FilledButton.styleFrom(minimumSize: Size.fromHeight(minButtonHeight)),
-              onPressed: email.value == null || password.value == null || state is LoginLoading ? null : () => _login(context),
-              icon: state is LoginLoading
-                  ? SizedBox(
-                      height: Theme.of(context).textTheme.labelLarge?.fontSize,
-                      width: Theme.of(context).textTheme.labelLarge?.fontSize,
-                      child: CircularProgressIndicator(strokeWidth: 2.0),
-                    )
-                  : Icon(Icons.login),
-              label: Text("Login"),
+            return SizedBox(
+              height: loginButtonHeight,
+              child: FilledButton.icon(
+                style: FilledButton.styleFrom(minimumSize: Size.fromHeight(loginButtonHeight)),
+                onPressed: _email.value == null || _password.value == null || state is LoginLoading ? null : () => _login(context),
+                icon: state is LoginLoading
+                    ? SizedBox(
+                        height: Theme.of(context).textTheme.labelLarge?.fontSize,
+                        width: Theme.of(context).textTheme.labelLarge?.fontSize,
+                        child: _progressIndicator,
+                      )
+                    : Icon(Icons.login),
+                label: Text(_loginLabel),
+              ),
             );
           },
         ),
@@ -75,8 +79,8 @@ class LoginForm extends HookWidget {
   void _login(BuildContext context) {
     context.read<LoginBloc>().add(
           LoginButtonPressed(
-            username: email.value!,
-            password: password.value!,
+            username: _email.value!,
+            password: _password.value!,
           ),
         );
   }

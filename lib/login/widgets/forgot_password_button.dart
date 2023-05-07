@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
+  final String forgotPassword = 'Passwort vergessen?';
   const ForgotPasswordButton({
     super.key,
   });
@@ -14,7 +15,7 @@ class ForgotPasswordButton extends StatelessWidget {
       onPressed: () {
         //TODO: Implement Forgot Password
       },
-      child: Text('Passwort vergessen?'),
+      child: Text(forgotPassword),
     );
   }
 }

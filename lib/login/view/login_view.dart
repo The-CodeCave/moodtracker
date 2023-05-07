@@ -63,16 +63,17 @@ class LoginView extends HookWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(height: defaultSpacerSize),
+                            const SizedBox(height: defaultSpacerSize),
                             LoginForm(),
-                            SizedBox(height: defaultSpacerSize),
+                            const SizedBox(height: defaultSpacerSize),
                             LoginTypeSeperator(),
+                            const SizedBox(height: defaultSpacerSize),
                             GoogleSignInButton(),
-                            SizedBox(height: defaultSpacerSize),
+                            const SizedBox(height: defaultSpacerSize),
                             AppleSignInButton(),
-                            SizedBox(height: defaultSpacerSize),
+                            const SizedBox(height: defaultSpacerSize),
                             PassKeySignInButton(),
-                            SizedBox(height: defaultSpacerSize),
+                            const SizedBox(height: defaultSpacerSize),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

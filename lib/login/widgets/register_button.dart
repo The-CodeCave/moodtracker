@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../router/app_router.dart';
 
 class RegisterButton extends StatelessWidget {
+  final String register = 'Registrieren';
   const RegisterButton({
     super.key,
   });
@@ -15,7 +16,7 @@ class RegisterButton extends StatelessWidget {
       onPressed: () {
         context.go(AppRoutes.register);
       },
-      child: Text('Registrieren'),
+      child: Text(register),
     );
   }
 }
