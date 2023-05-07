@@ -13,7 +13,7 @@ class LoginView extends HookWidget {
   final Color gradientBegin = const Color(0xFFe9ddff);
   final Color gradientEnd = const Color(0xFF4f606e);
   final EdgeInsets logoPadding = const EdgeInsets.all(20.0);
-  final EdgeInsets formPadding = const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30);
+  final EdgeInsets formPadding = const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: defaultSpacerSize);
   final int logoFlex = 1;
   final int loginFormFlex = 2;
 
@@ -52,38 +52,36 @@ class LoginView extends HookWidget {
                     child: Image.asset(logoAssetPath),
                   ),
                 ),
-                Expanded(
-                  flex: loginFormFlex,
-                  child: ClipRRect(
-                    borderRadius: clipBorderRadius,
-                    child: Container(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      child: Padding(
-                        padding: formPadding,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: defaultSpacerSize),
-                            LoginForm(),
-                            const SizedBox(height: defaultSpacerSize),
-                            LoginTypeSeperator(),
-                            const SizedBox(height: defaultSpacerSize),
-                            GoogleSignInButton(),
-                            const SizedBox(height: defaultSpacerSize),
-                            AppleSignInButton(),
-                            const SizedBox(height: defaultSpacerSize),
-                            PassKeySignInButton(),
-                            const SizedBox(height: defaultSpacerSize),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RegisterButton(),
-                                ForgotPasswordButton(),
-                              ],
-                            ),
-                          ],
-                        ),
+                ClipRRect(
+                  borderRadius: clipBorderRadius,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: Padding(
+                      padding: formPadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: defaultSpacerSize),
+                          LoginForm(),
+                          const SizedBox(height: defaultSpacerSize),
+                          LoginTypeSeperator(),
+                          const SizedBox(height: defaultSpacerSize),
+                          GoogleSignInButton(),
+                          const SizedBox(height: defaultSpacerSize),
+                          AppleSignInButton(),
+                          const SizedBox(height: defaultSpacerSize),
+                          PassKeySignInButton(),
+                          const SizedBox(height: defaultSpacerSize),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RegisterButton(),
+                              ForgotPasswordButton(),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
