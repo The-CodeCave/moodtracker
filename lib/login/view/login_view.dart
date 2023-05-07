@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +9,13 @@ import '../bloc/login_bloc.dart';
 import '../widgets/widgets.dart';
 
 class LoginView extends HookWidget {
+  final BorderRadius clipBorderRadius = const BorderRadius.only(topLeft: Radius.circular(48), topRight: Radius.circular(48));
   final Color gradientBegin = const Color(0xFFe9ddff);
   final Color gradientEnd = const Color(0xFF4f606e);
+  final EdgeInsets logoPadding = const EdgeInsets.all(20.0);
+  final EdgeInsets formPadding = const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30);
+  final int logoFlex = 1;
+  final int loginFormFlex = 2;
 
   const LoginView({super.key});
 
@@ -42,23 +46,20 @@ class LoginView extends HookWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: logoFlex,
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: logoPadding,
                     child: Image.asset(logoAssetPath),
                   ),
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: loginFormFlex,
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(48),
-                      topRight: Radius.circular(48),
-                    ),
+                    borderRadius: clipBorderRadius,
                     child: Container(
                       color: Theme.of(context).colorScheme.tertiary,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
+                        padding: formPadding,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -71,28 +72,13 @@ class LoginView extends HookWidget {
                             AppleSignInButton(),
                             SizedBox(height: defaultSpacerSize),
                             PassKeySignInButton(),
-                            SizedBox(height: !kIsWeb ? 2 : defaultSpacerSize),
+                            SizedBox(height: defaultSpacerSize),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // Use TextButton instead of gesture detector, improves mouse hover for web?
-                                TextButton(
-                                  style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onTertiary),
-                                  onPressed: () {
-                                    context.go(AppRoutes.register);
-                                  },
-                                  child: Text('Registrieren'),
-                                ),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Theme.of(context).colorScheme.onTertiary,
-                                  ),
-                                  onPressed: () {
-                                    //TODO: Implement Forgot Password
-                                  },
-                                  child: Text('Passwort vergessen?'),
-                                ),
+                                RegisterButton(),
+                                ForgotPasswordButton(),
                               ],
                             ),
                           ],
