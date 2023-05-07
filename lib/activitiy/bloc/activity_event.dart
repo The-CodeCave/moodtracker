@@ -21,3 +21,10 @@ class ActivityApplyFilterEvent extends ActivityEvent {
   final ActivityFilter? filter;
   const ActivityApplyFilterEvent({this.filter});
 }
+
+class ActivitySubmitRatingEvent extends ActivityEvent {
+  final Activity activity;
+  final ActivityRating rating;
+  const ActivitySubmitRatingEvent(
+      {required this.activity, required this.rating});
+}

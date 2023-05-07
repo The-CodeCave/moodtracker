@@ -6,6 +6,7 @@ import 'package:moodtracker/helper/view/cancel_button.dart';
 import 'package:moodtracker/helper/view/save_button.dart';
 
 import '../bloc/activity_add_dialog_bloc.dart';
+import '../model/activity_category.dart';
 
 class ActivityAddDialog extends StatelessWidget {
   final String title = 'Aktivität erstellen';

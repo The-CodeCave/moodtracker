@@ -5,6 +5,7 @@ import 'package:moodtracker/activitiy/model/activity.dart';
 import 'package:moodtracker/activitiy/model/activity_filter.dart';
 
 import '../bloc/activity_bloc.dart';
+import '../model/activity_category.dart';
 
 class ActivityFilterDialog extends HookWidget {
   const ActivityFilterDialog({super.key});
@@ -23,7 +24,9 @@ class ActivityFilterDialog extends HookWidget {
           actions: [
             TextButton(
               onPressed: () {
-                context.read<ActivityBloc>().add(ActivityApplyFilterEvent(filter: null));
+                context
+                    .read<ActivityBloc>()
+                    .add(ActivityApplyFilterEvent(filter: null));
                 Navigator.pop(context);
               },
               child: Text('Zurücksetzen'),
@@ -70,10 +73,15 @@ class ActivityFilterDialog extends HookWidget {
                   if (p0.isEmpty) {
                     filter = state.filter?.copyWith(selectedCategory: null);
                   } else {
-                    ActivityCategory category = ActivityCategory.values.firstWhere((element) => element.name == p0.first);
-                    filter = state.filter?.copyWith(selectedCategory: category) ?? ActivityFilter(selectedCategory: category);
+                    ActivityCategory category = ActivityCategory.values
+                        .firstWhere((element) => element.name == p0.first);
+                    filter =
+                        state.filter?.copyWith(selectedCategory: category) ??
+                            ActivityFilter(selectedCategory: category);
                   }
-                  context.read<ActivityBloc>().add(ActivityApplyFilterEvent(filter: filter));
+                  context
+                      .read<ActivityBloc>()
+                      .add(ActivityApplyFilterEvent(filter: filter));
                 },
               ),
               SizedBox(
@@ -93,9 +101,12 @@ class ActivityFilterDialog extends HookWidget {
                   if (value.isEmpty) {
                     filter = state.filter?.copyWith(nameFilter: null);
                   } else {
-                    filter = state.filter?.copyWith(nameFilter: value) ?? ActivityFilter(nameFilter: value);
+                    filter = state.filter?.copyWith(nameFilter: value) ??
+                        ActivityFilter(nameFilter: value);
                   }
-                  context.read<ActivityBloc>().add(ActivityApplyFilterEvent(filter: filter));
+                  context
+                      .read<ActivityBloc>()
+                      .add(ActivityApplyFilterEvent(filter: filter));
                 },
               ),
             ],
