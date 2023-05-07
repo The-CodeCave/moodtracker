@@ -14,8 +14,6 @@ class LoginView extends HookWidget {
   final Color gradientEnd = const Color(0xFF4f606e);
   final EdgeInsets logoPadding = const EdgeInsets.all(20.0);
   final EdgeInsets formPadding = const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: defaultSpacerSize);
-  final int logoFlex = 1;
-  final int loginFormFlex = 2;
 
   const LoginView({super.key});
 
@@ -46,7 +44,6 @@ class LoginView extends HookWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  flex: logoFlex,
                   child: Padding(
                     padding: logoPadding,
                     child: Image.asset(logoAssetPath),
