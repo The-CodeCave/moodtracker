@@ -21,6 +21,28 @@ class LoginService {
     return _auth.currentUser;
   }
 
+  Future<User?> login(String email, String password) async {
+    try {
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        throw 'Wrong password provided for that user.';
+      } else if (e.code == 'invalid-email') {
+        throw 'Invalid email.';
+      } else if (e.code == 'user-disabled') {
+        throw 'User disabled.';
+      } else {
+        throw 'Unknown error.';
+      }
+    }
+  }
+
   static String generateNonce([int length = 32]) {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
@@ -70,26 +92,10 @@ class LoginService {
     }
   }
 
-  Future<User?> login(String email, String password) async {
-    try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        throw 'Wrong password provided for that user.';
-      } else if (e.code == 'invalid-email') {
-        throw 'Invalid email.';
-      } else if (e.code == 'user-disabled') {
-        throw 'User disabled.';
-      } else {
-        throw 'Unknown error.';
-      }
-    }
+  Future<User?> signInWithAppleWeb() async {
+    final provider = OAuthProvider("apple.com");
+    await _auth.signInWithPopup(provider);
+    return _auth.currentUser;
   }
 
   Future<User?> signInWithGoogle() async {

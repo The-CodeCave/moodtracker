@@ -47,7 +47,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   FutureOr<void> _onAppleLoginButtonPressed(AppleLoginButtonPressed event, Emitter<LoginState> emit) async {
     emit(LoginLoadingApple());
     try {
-      final user = await _loginService.signInWithApple();
+      User? user;
+      if (event.isWeb) {
+        user = await _loginService.signInWithAppleWeb();
+      } else {
+        user = await _loginService.signInWithApple();
+      }
       emit(LoginSuccess(user: user));
     } on Exception catch (e) {
       emit(LoginError(message: e.toString()));

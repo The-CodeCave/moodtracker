@@ -67,7 +67,7 @@ class SocialLoginButton extends StatelessWidget {
         context.read<LoginBloc>().add(GoogleLoginButtonPressed(isWeb: kIsWeb));
         break;
       case LoginProvider.apple:
-        context.read<LoginBloc>().add(AppleLoginButtonPressed());
+        context.read<LoginBloc>().add(AppleLoginButtonPressed(isWeb: kIsWeb));
         break;
       case LoginProvider.applePasskey:
         context.read<LoginBloc>().add(LoginWithPasskey());
