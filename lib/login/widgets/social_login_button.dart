@@ -5,7 +5,8 @@ import 'package:moodtracker/login/model/login_provider.dart';
 import '../../constants.dart';
 import '../bloc/login_bloc.dart';
 
-class LoginButton extends StatelessWidget {
+class SocialLoginButton extends StatelessWidget {
+  final String notImplemented = 'Social provider not implemented.';
   final double fontSize = loginButtonHeight * 0.43;
 
   final LoginProvider provider;
@@ -13,7 +14,7 @@ class LoginButton extends StatelessWidget {
   final Color foregroundColor;
   final Color backgroundColor;
 
-  const LoginButton({
+  const SocialLoginButton({
     required this.provider,
     required this.icon,
     required this.foregroundColor,
@@ -32,7 +33,14 @@ class LoginButton extends StatelessWidget {
               case LoginProvider.google:
                 context.read<LoginBloc>().add(GoogleLoginButtonPressed());
                 break;
+              case LoginProvider.apple:
+                context.read<LoginBloc>().add(AppleLoginButtonPressed());
+                break;
+              case LoginProvider.appleKeyPass:
+                context.read<LoginBloc>().add(LoginWithPasskey());
+                break;
               default:
+                throw Exception(notImplemented);
             }
           },
           child: Padding(

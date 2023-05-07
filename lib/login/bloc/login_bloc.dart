@@ -15,7 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc() : super(LoginInitial()) {
     _loginService = getIt.get<LoginService>();
-    on<LoginButtonPressed>(_onLoginButtonPressed);
+    on<LoginRequestEvent>(_onLoginRequestEvent);
     on<RegisterButtonPressed>(_onRegisterButtonPressed);
     on<GoogleLoginButtonPressed>(_onGoogleLoginButtonPressed);
     on<AppleLoginButtonPressed>(_onAppleLoginButtonPressed);
@@ -67,6 +67,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } catch (e) {
       emit(LoginError(message: e.toString()));
+    }
+  }
+
+  FutureOr<void> _onLoginRequestEvent(LoginRequestEvent event, Emitter<LoginState> emit) {
+    if (event is LoginButtonPressed) {
+      return _onLoginButtonPressed(event, emit);
+    } else if (event is GoogleLoginButtonPressed) {
+      return _onGoogleLoginButtonPressed(event, emit);
+    } else if (event is AppleLoginButtonPressed) {
+      return _onAppleLoginButtonPressed(event, emit);
+    } else if (event is LoginWithPasskey) {
+      return _onLoginWithPasskey(event, emit);
     }
   }
 }
