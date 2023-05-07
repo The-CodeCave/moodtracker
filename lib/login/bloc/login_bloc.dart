@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:moodtracker/login/bloc/login_service.dart';
+import 'package:moodtracker/login/model/login_provider.dart';
 import 'package:moodtracker/setup_services.dart';
 
 part 'login_event.dart';
