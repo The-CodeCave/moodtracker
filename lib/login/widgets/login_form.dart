@@ -20,34 +20,48 @@ class _LoginFormState extends State<LoginForm> {
   final CircularProgressIndicator _progressIndicator = const CircularProgressIndicator(strokeWidth: 2.0);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final Color errorFontColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          controller: emailController,
-          decoration: InputDecoration(
-            labelText: _emailLabel,
-            filled: true,
-            suffixIcon: ExcludeFocusTraversal(
-              child: IconButton(
-                onPressed: () => emailController.clear(),
-                icon: Icon(Icons.close),
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        String? emailError;
+        String? passwordError;
+        TextStyle? errorStyle = Theme.of(context).textTheme.bodySmall?.copyWith(color: errorFontColor);
+
+        if (state is LoginError) {
+          emailError = state.emailError;
+          passwordError = state.passwordError;
+        }
+
+        return Column(
+          children: [
+            TextFormField(
+              controller: emailController,
+              decoration: InputDecoration(
+                labelText: _emailLabel,
+                errorText: emailError,
+                errorStyle: errorStyle,
+                filled: true,
+                suffixIcon: ExcludeFocusTraversal(
+                  child: IconButton(
+                    onPressed: () => emailController.clear(),
+                    icon: Icon(Icons.close),
+                  ),
+                ),
               ),
+              keyboardType: TextInputType.emailAddress,
             ),
-          ),
-          keyboardType: TextInputType.emailAddress,
-        ),
-        const SizedBox(height: defaultSpacerSize),
-        BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            return TextFormField(
+            const SizedBox(height: defaultSpacerSize),
+            TextFormField(
               controller: passwordController,
               obscureText: state.hidePassword,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
                 labelText: _passwordLabel,
+                errorText: passwordError,
+                errorStyle: errorStyle,
                 filled: true,
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -56,13 +70,9 @@ class _LoginFormState extends State<LoginForm> {
                   icon: state.hidePassword ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
                 ),
               ),
-            );
-          },
-        ),
-        const SizedBox(height: defaultSpacerSize),
-        BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            return SizedBox(
+            ),
+            const SizedBox(height: defaultSpacerSize),
+            SizedBox(
               height: loginButtonHeight,
               child: FilledButton.icon(
                 style: FilledButton.styleFrom(minimumSize: Size.fromHeight(loginButtonHeight)),
@@ -76,17 +86,17 @@ class _LoginFormState extends State<LoginForm> {
                     : Icon(Icons.login),
                 label: Text(_loginLabel),
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 
   void _login(BuildContext context) {
     context.read<LoginBloc>().add(
           LoginButtonPressed(
-            username: emailController.text,
+            email: emailController.text,
             password: passwordController.text,
           ),
         );

@@ -17,16 +17,16 @@ class LoginRequestEvent extends LoginEvent {
 }
 
 class LoginButtonPressed extends LoginRequestEvent {
-  final String username;
+  final String email;
   final String password;
 
   const LoginButtonPressed({
-    required this.username,
+    required this.email,
     required this.password,
   }) : super(provider: LoginProvider.moodtracker);
 
   @override
-  List<Object> get props => [username, password];
+  List<Object> get props => [email, password];
 }
 
 class GoogleLoginButtonPressed extends LoginRequestEvent {

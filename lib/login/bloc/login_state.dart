@@ -33,12 +33,20 @@ class LoginSuccess extends LoginState {
 
 class LoginError extends LoginState {
   final String message;
+  final String? emailError;
+  final String? passwordError;
 
   const LoginError({
     required this.message,
+    this.emailError,
+    this.passwordError,
     super.hidePassword,
   });
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [
+        message,
+        emailError ?? '',
+        passwordError ?? '',
+      ];
 }

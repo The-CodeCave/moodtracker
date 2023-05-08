@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:moodtracker/login/model/login_exception.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_passkeys/flutter_passkeys.dart';
@@ -29,17 +30,10 @@ class LoginService {
       );
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        throw 'Wrong password provided for that user.';
-      } else if (e.code == 'invalid-email') {
-        throw 'Invalid email.';
-      } else if (e.code == 'user-disabled') {
-        throw 'User disabled.';
-      } else {
-        throw 'Unknown error.';
-      }
+      throw LoginException.fromCode(e);
+    } catch (e) {
+      debugPrint('Unhandled exception: $e');
+      rethrow;
     }
   }
 
