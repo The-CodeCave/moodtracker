@@ -8,6 +8,7 @@ import 'package:moodtracker/register/bloc/register_bloc.dart';
 import '../../router/app_router.dart';
 
 class RegisterView extends HookWidget {
+  // TODO: fix this according to cleanings in login feature
   final double spacerHeight = 10;
   const RegisterView({Key? key}) : super(key: key);
 
