@@ -4,8 +4,6 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_passkeys/flutter_passkeys.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +19,28 @@ class LoginService {
 
   User? getUser() {
     return _auth.currentUser;
+  }
+
+  Future<User?> login(String email, String password) async {
+    try {
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        throw 'Wrong password provided for that user.';
+      } else if (e.code == 'invalid-email') {
+        throw 'Invalid email.';
+      } else if (e.code == 'user-disabled') {
+        throw 'User disabled.';
+      } else {
+        throw 'Unknown error.';
+      }
+    }
   }
 
   static String generateNonce([int length = 32]) {
@@ -72,43 +92,53 @@ class LoginService {
     }
   }
 
-  Future<User?> login(String email, String password) async {
-    try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        throw 'Wrong password provided for that user.';
-      } else if (e.code == 'invalid-email') {
-        throw 'Invalid email.';
-      } else if (e.code == 'user-disabled') {
-        throw 'User disabled.';
-      } else {
-        throw 'Unknown error.';
-      }
-    }
+  Future<User?> signInWithAppleWeb() async {
+    final provider = OAuthProvider("apple.com");
+    await _auth.signInWithPopup(provider);
+    return _auth.currentUser;
   }
 
-  Future<User?> loginWithGoogle() async {
-    try {
-      GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: [
-          'email',
-        ],
+  Future<User?> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn(
+      scopes: [
+        'email',
+      ],
+    ).signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    if (googleAuth != null) {
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-      await googleSignIn.signIn();
+
+      // Once signed in, return the UserCredential
+      await _auth.signInWithCredential(credential);
+      return _auth.currentUser;
+    }
+    return null;
+  }
+
+  Future<User?> signInWithGoogleWeb() async {
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+    try {
+      await _auth.signInWithPopup(googleProvider);
       return _auth.currentUser;
     } catch (e) {
-      throw 'Login failed';
+      rethrow;
     }
   }
 
-  Future<User?> register(String email, String password) async {}
+  Future<User?> register(String email, String password) async {
+    // TODO: implement register function
+    return null;
+  }
+
   Future<User?> loginWithPasskey() async {
     try {
       final res = await http.get(

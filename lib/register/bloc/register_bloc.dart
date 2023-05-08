@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moodtracker/register/bloc/register_service.dart';
 import 'package:moodtracker/setup_services.dart';
 
@@ -18,20 +18,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<RegisterWithPasskey>(_onRegisterWithPasskey);
   }
 
-  FutureOr<void> _onRegisterButtonPressed(
-      RegisterButtonPressed event, Emitter<RegisterState> emit) async {
+  FutureOr<void> _onRegisterButtonPressed(RegisterButtonPressed event, Emitter<RegisterState> emit) async {
     emit(RegisterLoading());
     try {
-      final user =
-          await _registerService.register(event.username, event.password);
+      final user = await _registerService.register(event.username, event.password);
       emit(RegisterSuccess(user: user));
     } catch (e) {
       emit(RegisterError(message: e.toString()));
     }
   }
 
-  FutureOr<void> _onRegisterWithPasskey(
-      RegisterWithPasskey event, Emitter<RegisterState> emit) async {
+  FutureOr<void> _onRegisterWithPasskey(RegisterWithPasskey event, Emitter<RegisterState> emit) async {
     emit(RegisterLoadingPasskey());
     //TODO: Figure out why the error isnt thrown if the http request fails
     try {

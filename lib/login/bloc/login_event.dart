@@ -7,25 +7,42 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoginButtonPressed extends LoginEvent {
+class LoginRequestEvent extends LoginEvent {
+  final LoginProvider provider;
+  const LoginRequestEvent({required this.provider});
+}
+
+class LoginButtonPressed extends LoginRequestEvent {
   final String username;
   final String password;
 
   const LoginButtonPressed({
     required this.username,
     required this.password,
-  });
+  }) : super(provider: LoginProvider.moodtracker);
 
   @override
   List<Object> get props => [username, password];
 
+  // TODO: THIS POSES A HIGH SECURITY RISK
   @override
   String toString() => 'LoginButtonPressed { username: $username, password: $password }';
 }
 
-class GoogleLoginButtonPressed extends LoginEvent {}
+class GoogleLoginButtonPressed extends LoginRequestEvent {
+  final bool isWeb;
+  const GoogleLoginButtonPressed({required this.isWeb}) : super(provider: LoginProvider.google);
+}
 
-class AppleLoginButtonPressed extends LoginEvent {}
+class AppleLoginButtonPressed extends LoginRequestEvent {
+  final bool isWeb;
+
+  const AppleLoginButtonPressed({required this.isWeb}) : super(provider: LoginProvider.apple);
+}
+
+class LoginWithPasskey extends LoginRequestEvent {
+  const LoginWithPasskey() : super(provider: LoginProvider.applePasskey);
+}
 
 class RegisterButtonPressed extends LoginEvent {
   final String username;
@@ -42,5 +59,3 @@ class RegisterButtonPressed extends LoginEvent {
   @override
   String toString() => 'RegisterButtonPressed { username: $username, password: $password }';
 }
-
-class LoginWithPasskey extends LoginEvent {}
