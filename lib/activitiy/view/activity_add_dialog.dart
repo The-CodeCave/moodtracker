@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moodtracker/activitiy/model/activity.dart';
 import 'package:moodtracker/helper/view/cancel_button.dart';
 import 'package:moodtracker/helper/view/save_button.dart';
 
@@ -40,9 +39,7 @@ class ActivityAddDialog extends StatelessWidget {
             CancelButton(),
             SaveButton(
               onPressed: () {
-                context
-                    .read<ActivityAddDialogBloc>()
-                    .add(ActivityAddDialogCreateEvent(
+                context.read<ActivityAddDialogBloc>().add(ActivityAddDialogCreateEvent(
                       name: nameController.text,
                       hours: hoursController.text,
                     ));
@@ -61,8 +58,7 @@ class ActivityAddDialog extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildChildren(
-      BuildContext context, ActivityAddDialogState state) {
+  List<Widget> _buildChildren(BuildContext context, ActivityAddDialogState state) {
     String? nameError;
     String? hoursError;
     String? selectedSegmentsError;
@@ -114,9 +110,7 @@ class ActivityAddDialog extends StatelessWidget {
         ],
         emptySelectionAllowed: true,
         selected: state.selectedSegments,
-        onSelectionChanged: (p0) => context
-            .read<ActivityAddDialogBloc>()
-            .add(ActivityAddDialogChangedEvent(
+        onSelectionChanged: (p0) => context.read<ActivityAddDialogBloc>().add(ActivityAddDialogChangedEvent(
               name: nameController.text,
               hours: hoursController.text,
               selectedSegments: p0,

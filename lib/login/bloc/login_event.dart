@@ -27,10 +27,6 @@ class LoginButtonPressed extends LoginRequestEvent {
 
   @override
   List<Object> get props => [username, password];
-
-  // TODO: THIS POSES A HIGH SECURITY RISK
-  @override
-  String toString() => 'LoginButtonPressed { username: $username, password: $password }';
 }
 
 class GoogleLoginButtonPressed extends LoginRequestEvent {

@@ -24,8 +24,7 @@ class MethodChannelFlutterPasskeys extends FlutterPasskeysPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
 
     return version;
   }
@@ -36,8 +35,7 @@ class MethodChannelFlutterPasskeys extends FlutterPasskeysPlatform {
     required String displayName,
     required String relyingParty,
     required String challenge,
-    UserVerificationPreference userVerificationPreference =
-        UserVerificationPreference.required,
+    UserVerificationPreference userVerificationPreference = UserVerificationPreference.required,
     AttestationPreference attestationPreference = AttestationPreference.direct,
   }) async {
     activeRequest = Completer<CreationResponse>();
@@ -52,7 +50,7 @@ class MethodChannelFlutterPasskeys extends FlutterPasskeysPlatform {
         "attestationPreference": attestationPreference.value,
       },
     ).then((value) => {
-          print(value),
+          debugPrint(value),
         });
     return activeRequest!.future as Future<CreationResponse>;
   }
@@ -61,8 +59,7 @@ class MethodChannelFlutterPasskeys extends FlutterPasskeysPlatform {
   Future<AuthenticationResponse> authenticateWithPasskey({
     required String relyingParty,
     required String challenge,
-    UserVerificationPreference userVerificationPreference =
-        UserVerificationPreference.required,
+    UserVerificationPreference userVerificationPreference = UserVerificationPreference.required,
     List<String> allowedCredentials = const [],
   }) async {
     activeRequest = Completer<AuthenticationResponse>();
@@ -75,19 +72,17 @@ class MethodChannelFlutterPasskeys extends FlutterPasskeysPlatform {
         "userVerificationPreference": userVerificationPreference.value,
       },
     ).then((value) => {
-          print(value),
+          debugPrint(value),
         });
     return activeRequest!.future as Future<AuthenticationResponse>;
   }
 
   Future _handleMethodCall(MethodCall call) async {
     if (call.method == "passkey_create_complete") {
-      activeRequest!.complete(
-          CreationResponse.fromMap(Map<String, dynamic>.from(call.arguments)));
+      activeRequest!.complete(CreationResponse.fromMap(Map<String, dynamic>.from(call.arguments)));
     }
     if (call.method == "passkey_auth_complete") {
-      final mapped = AuthenticationResponse.fromMap(
-          Map<String, dynamic>.from(call.arguments));
+      final mapped = AuthenticationResponse.fromMap(Map<String, dynamic>.from(call.arguments));
       activeRequest!.complete(mapped);
     }
     if (call.method == "passkey_auth_failed") {
