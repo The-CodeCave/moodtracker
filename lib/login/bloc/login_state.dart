@@ -1,15 +1,20 @@
 part of 'login_bloc.dart';
 
 abstract class LoginState extends Equatable {
-  const LoginState();
+  final bool hidePassword;
+  const LoginState({this.hidePassword = true});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [hidePassword];
 }
 
-class LoginInitial extends LoginState {}
+class LoginInitial extends LoginState {
+  const LoginInitial({super.hidePassword});
+}
 
-class LoginLoading extends LoginState {}
+class LoginLoading extends LoginState {
+  const LoginLoading({super.hidePassword});
+}
 
 class LoginLoadingPasskey extends LoginState {}
 
@@ -29,7 +34,10 @@ class LoginSuccess extends LoginState {
 class LoginError extends LoginState {
   final String message;
 
-  const LoginError({required this.message});
+  const LoginError({
+    required this.message,
+    super.hidePassword,
+  });
 
   @override
   List<Object> get props => [message];

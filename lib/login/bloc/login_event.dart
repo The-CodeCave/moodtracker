@@ -7,6 +7,10 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LoginHidePasswordEvent extends LoginEvent {
+  const LoginHidePasswordEvent();
+}
+
 class LoginRequestEvent extends LoginEvent {
   final LoginProvider provider;
   const LoginRequestEvent({required this.provider});

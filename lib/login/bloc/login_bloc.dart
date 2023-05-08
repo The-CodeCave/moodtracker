@@ -15,17 +15,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc() : super(LoginInitial()) {
     _loginService = getIt.get<LoginService>();
+    on<LoginHidePasswordEvent>(_onLoginHidePasswordEvent);
     on<LoginRequestEvent>(_onLoginRequestEvent);
     on<RegisterButtonPressed>(_onRegisterButtonPressed);
   }
 
+  FutureOr<void> _onLoginHidePasswordEvent(LoginHidePasswordEvent event, Emitter<LoginState> emit) {
+    emit(LoginInitial(hidePassword: !state.hidePassword));
+  }
+
   FutureOr<void> _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+    emit(LoginLoading(hidePassword: state.hidePassword));
     try {
       final user = await _loginService.login(event.username, event.password);
       emit(LoginSuccess(user: user));
     } catch (e) {
-      emit(LoginError(message: e.toString()));
+      emit(LoginError(message: e.toString(), hidePassword: state.hidePassword));
     }
   }
 
