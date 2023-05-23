@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'activity.dart';
 import 'activity_category.dart';
 
 class ActivityFilter {
@@ -33,29 +32,23 @@ class ActivityFilter {
 
   factory ActivityFilter.fromMap(Map<String, dynamic> map) {
     return ActivityFilter(
-      selectedCategory: map['selectedCategory'] != null
-          ? ActivityCategory.fromString(map['selectedCategory'])
-          : null,
-      nameFilter:
-          map['nameFilter'] != null ? map['nameFilter'] as String : null,
+      selectedCategory: map['selectedCategory'] != null ? ActivityCategory.fromString(map['selectedCategory']) : null,
+      nameFilter: map['nameFilter'] != null ? map['nameFilter'] as String : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ActivityFilter.fromJson(String source) =>
-      ActivityFilter.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ActivityFilter.fromJson(String source) => ActivityFilter.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'ActivityFilter(selectedCategory: $selectedCategory, nameFilter: $nameFilter)';
+  String toString() => 'ActivityFilter(selectedCategory: $selectedCategory, nameFilter: $nameFilter)';
 
   @override
   bool operator ==(covariant ActivityFilter other) {
     if (identical(this, other)) return true;
 
-    return other.selectedCategory == selectedCategory &&
-        other.nameFilter == nameFilter;
+    return other.selectedCategory == selectedCategory && other.nameFilter == nameFilter;
   }
 
   @override

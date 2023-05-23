@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moodtracker/activitiy/view/activity_list_view.dart';
 import 'package:moodtracker/app/view/app_error_view.dart';
-import 'package:moodtracker/login/bloc/login_service.dart';
+import 'package:moodtracker/login/service/login_service.dart';
 import 'package:moodtracker/login/view/auth_view.dart';
 import 'package:moodtracker/login/view/login_view.dart';
 import 'package:moodtracker/register/view/register_view.dart';

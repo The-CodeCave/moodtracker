@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:moodtracker/login/bloc/login_service.dart';
+import 'package:moodtracker/constants.dart';
+import 'package:moodtracker/login/model/login_exception.dart';
+import 'package:moodtracker/login/service/login_service.dart';
 import 'package:moodtracker/login/model/login_provider.dart';
 import 'package:moodtracker/setup_services.dart';
 
@@ -15,17 +17,51 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc() : super(LoginInitial()) {
     _loginService = getIt.get<LoginService>();
+    on<LoginHidePasswordEvent>(_onLoginHidePasswordEvent);
     on<LoginRequestEvent>(_onLoginRequestEvent);
     on<RegisterButtonPressed>(_onRegisterButtonPressed);
   }
 
+  FutureOr<void> _onLoginHidePasswordEvent(LoginHidePasswordEvent event, Emitter<LoginState> emit) {
+    emit(LoginInitial(hidePassword: !state.hidePassword));
+  }
+
   FutureOr<void> _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
-    try {
-      final user = await _loginService.login(event.username, event.password);
-      emit(LoginSuccess(user: user));
-    } catch (e) {
-      emit(LoginError(message: e.toString()));
+    emit(LoginLoading(hidePassword: state.hidePassword));
+
+    String? emailEmpty;
+    String? passwordEmpty;
+    if (event.email.isEmpty) {
+      emailEmpty = requiredData;
+    }
+    if (event.password.isEmpty) {
+      passwordEmpty = requiredData;
+    }
+
+    if (emailEmpty != null || passwordEmpty != null) {
+      emit(LoginError(
+        message: requiredData,
+        emailError: emailEmpty,
+        passwordError: passwordEmpty,
+      ));
+    } else {
+      try {
+        final user = await _loginService.login(event.email, event.password);
+        emit(LoginSuccess(user: user));
+      } on LoginException catch (e) {
+        switch (e.type) {
+          case LoginErrorType.email:
+            emit(LoginError(message: e.message, emailError: e.message));
+            break;
+          case LoginErrorType.password:
+            emit(LoginError(message: e.message, passwordError: e.message));
+            break;
+          default:
+            emit(LoginError(message: e.message));
+        }
+      } catch (e) {
+        emit(LoginError(message: e.toString(), hidePassword: state.hidePassword));
+      }
     }
   }
 

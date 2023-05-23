@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -22,8 +21,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     on<ActivityApplyFilterEvent>(_onActivityApplyFilterEvent);
     on<ActivitySubmitRatingEvent>(_onActivitySubmitRatingEvent);
 
-    _subscription = _service.activityList().listen((activityList) =>
-        add(ActivityListUpdatedEvent(activityList: activityList)));
+    _subscription = _service.activityList().listen((activityList) => add(ActivityListUpdatedEvent(activityList: activityList)));
   }
 
   @override
@@ -32,25 +30,19 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     return super.close();
   }
 
-  FutureOr<void> _onActivityAddEvent(
-      ActivityAddEvent event, Emitter<ActivityState> emit) {
+  FutureOr<void> _onActivityAddEvent(ActivityAddEvent event, Emitter<ActivityState> emit) {
     _service.add(event.activity);
   }
 
-  FutureOr<void> _onActivityListUpdatedEvent(
-      ActivityListUpdatedEvent event, Emitter<ActivityState> emit) async {
-    emit(ActivityListUpdatedState(
-        activityList: event.activityList, filter: state.filter));
+  FutureOr<void> _onActivityListUpdatedEvent(ActivityListUpdatedEvent event, Emitter<ActivityState> emit) async {
+    emit(ActivityListUpdatedState(activityList: event.activityList, filter: state.filter));
   }
 
-  FutureOr<void> _onActivityApplyFilterEvent(
-      ActivityApplyFilterEvent event, Emitter<ActivityState> emit) {
-    emit(ActivityListUpdatedState(
-        activityList: state.activityList, filter: event.filter));
+  FutureOr<void> _onActivityApplyFilterEvent(ActivityApplyFilterEvent event, Emitter<ActivityState> emit) {
+    emit(ActivityListUpdatedState(activityList: state.activityList, filter: event.filter));
   }
 
-  FutureOr<void> _onActivitySubmitRatingEvent(
-      ActivitySubmitRatingEvent event, Emitter<ActivityState> emit) async {
+  FutureOr<void> _onActivitySubmitRatingEvent(ActivitySubmitRatingEvent event, Emitter<ActivityState> emit) async {
     //Should auto exit the loading state when the list updates
     emit(ActivityUpdateLoadingState(
       updatingActivity: event.activity,
